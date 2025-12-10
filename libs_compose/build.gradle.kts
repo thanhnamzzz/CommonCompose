@@ -11,12 +11,6 @@ android {
     namespace = "common.libs.compose"
     compileSdk = 36
 
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
-
     defaultConfig {
         minSdk = 23
 
