@@ -52,7 +52,10 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui.tooling.preview)
 //	implementation(libs.androidx.compose.foundation)
-//	implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
+	implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
+    implementation(libs.androidx.activity.compose)
+    implementation("androidx.activity:activity-ktx:1.12.1")
 }
 
 publishing.publications {
