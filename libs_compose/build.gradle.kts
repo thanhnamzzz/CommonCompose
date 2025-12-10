@@ -36,9 +36,6 @@ android {
 			jvmTarget.set(JvmTarget.JVM_17)
 		}
 	}
-	publishing {
-		singleVariant("release")
-	}
 
 	buildFeatures { compose = true }
 }
@@ -63,6 +60,5 @@ publishing.publications {
 		afterEvaluate {
 			from(components["release"])
 		}
-		artifactId = "compose"
 	}
 }
