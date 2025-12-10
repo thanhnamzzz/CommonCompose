@@ -20,5 +20,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "CommonCompose"
-include(":app")
-include(":libs_compose")
+include(":app", ":libs_compose")
