@@ -12,7 +12,9 @@ android {
 	compileSdk = 36
 
 	publishing {
-		singleVariant("release")
+		singleVariant("release") {
+			withSourcesJar()
+		}
 	}
 
 	defaultConfig {
@@ -58,11 +60,24 @@ dependencies {
 //	implementation(libs.androidx.compose.foundation)
 //	implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
 }
+//publishing {
+//	publications {
+//		register<MavenPublication>("release") {
+//			groupId = "common-libs"
+//			artifactId = "compose"
+//			version = "1.0"
+//			from(components["release"])
+//		}
+//	}
+//}
 
 publishing.publications {
 	create<MavenPublication>("release") {
 		afterEvaluate {
 			from(components["release"])
 		}
+		groupId = "common-libs"
+		artifactId = "compose"
+		version = "1.0"
 	}
 }
