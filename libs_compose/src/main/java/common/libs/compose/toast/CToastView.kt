@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import common.libs.compose.R
 
@@ -181,53 +180,53 @@ internal fun CToastView(data: CToastData, config: CToastConfiguration) {
 	}
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun NiceToastViewPreview_No_FullBackground() {
-	CToastView(
-		data = CToastData(
-			message = "This is a sample success message to demonstrate the NiceToastView composable.",
-			title = "Success",
-			type = CToastType.SUCCESS,
-			duration = 4000L,
-			isDarkMode = false,
-			isFullBackground = false,
-//            position = CToastPosition.BOTTOM
-		),
-		config = CToastConfiguration()
-	)
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun NiceToastViewPreview_FullBackground_DarkMode() {
-	CToastView(
-		data = CToastData(
-			message = "This is a sample error message to demonstrate the NiceToastView composable with full background in dark mode.",
-			title = "Error",
-			type = CToastType.ERROR,
-			duration = 4000L,
-			isDarkMode = true,
-			isFullBackground = true,
-//            position = CToastPosition.BOTTOM
-		),
-		config = CToastConfiguration()
-	)
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun NiceToastViewPreview_FullBackground_LightMode() {
-	CToastView(
-		data = CToastData(
-			message = "This is a sample warning message to demonstrate the NiceToastView composable with full background in light mode.",
-			title = "Warning",
-			type = CToastType.WARNING,
-			duration = 4000L,
-			isDarkMode = false,
-			isFullBackground = true,
-//            position = CToastPosition.BOTTOM
-		),
-		config = CToastConfiguration()
-	)
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun NiceToastViewPreview_No_FullBackground() {
+//	CToastView(
+//		data = CToastData(
+//			message = "This is a sample success message to demonstrate the NiceToastView composable.",
+//			title = "Success",
+//			type = CToastType.SUCCESS,
+//			duration = 4000L,
+//			isDarkMode = false,
+//			isFullBackground = false,
+////            position = CToastPosition.BOTTOM
+//		),
+//		config = CToastConfiguration()
+//	)
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//private fun NiceToastViewPreview_FullBackground_DarkMode() {
+//	CToastView(
+//		data = CToastData(
+//			message = "This is a sample error message to demonstrate the NiceToastView composable with full background in dark mode.",
+//			title = "Error",
+//			type = CToastType.ERROR,
+//			duration = 4000L,
+//			isDarkMode = true,
+//			isFullBackground = true,
+////            position = CToastPosition.BOTTOM
+//		),
+//		config = CToastConfiguration()
+//	)
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//private fun NiceToastViewPreview_FullBackground_LightMode() {
+//	CToastView(
+//		data = CToastData(
+//			message = "This is a sample warning message to demonstrate the NiceToastView composable with full background in light mode.",
+//			title = "Warning",
+//			type = CToastType.WARNING,
+//			duration = 4000L,
+//			isDarkMode = false,
+//			isFullBackground = true,
+////            position = CToastPosition.BOTTOM
+//		),
+//		config = CToastConfiguration()
+//	)
+//}
