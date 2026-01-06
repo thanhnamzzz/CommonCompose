@@ -64,5 +64,5 @@ dependencies {
 
 	//LiquidGlass
 	implementation(libs.backdrop)
-	implementation(libs.capsule)
+//	implementation(libs.capsule)
 }

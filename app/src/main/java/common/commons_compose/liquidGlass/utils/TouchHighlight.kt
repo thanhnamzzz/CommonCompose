@@ -23,7 +23,7 @@ import kotlin.apply
 /**
  * Tạo hiệu ứng highlight tương tác theo ngón tay
  */
-class InteractiveHighlight(
+class TouchHighlight(
     val animationScope: CoroutineScope,
     val position: (size: Size, offset: Offset) -> Offset = { _, offset -> offset }
 ) {
@@ -102,20 +102,23 @@ half4 main(float2 coord) {
                 onDragStart = { down ->
                     startPosition = down.position
                     animationScope.launch {
-                        launch { pressProgressAnimation.animateTo(1f, pressProgressAnimationSpec) }
-                        launch { positionAnimation.snapTo(startPosition) }
+                        pressProgressAnimation.stop()
+                        positionAnimation.stop()
+
+                        pressProgressAnimation.animateTo(1f, pressProgressAnimationSpec)
+                        positionAnimation.snapTo(startPosition)
                     }
                 },
                 onDragEnd = {
                     animationScope.launch {
-                        launch { pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec) }
-                        launch { positionAnimation.animateTo(startPosition, positionAnimationSpec) }
+                        pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec)
+                        positionAnimation.animateTo(startPosition, positionAnimationSpec)
                     }
                 },
                 onDragCancel = {
                     animationScope.launch {
-                        launch { pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec) }
-                        launch { positionAnimation.animateTo(startPosition, positionAnimationSpec) }
+                        pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec)
+                        positionAnimation.animateTo(startPosition, positionAnimationSpec)
                     }
                 }
             ) { change, _ ->
