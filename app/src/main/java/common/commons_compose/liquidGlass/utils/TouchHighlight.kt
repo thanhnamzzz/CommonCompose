@@ -17,6 +17,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.util.fastCoerceIn
 import common.libs.compose.extensions.isTiramisu33Plus
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlin.apply
 
@@ -24,28 +25,28 @@ import kotlin.apply
  * Tạo hiệu ứng highlight tương tác theo ngón tay
  */
 class TouchHighlight(
-    val animationScope: CoroutineScope,
-    val position: (size: Size, offset: Offset) -> Offset = { _, offset -> offset }
+	val animationScope: CoroutineScope,
+	val position: (size: Size, offset: Offset) -> Offset = { _, offset -> offset }
 ) {
 
-    private val pressProgressAnimationSpec =
-        spring(0.5f, 300f, 0.001f)
-    private val positionAnimationSpec =
-        spring(0.5f, 300f, Offset.VisibilityThreshold)
+	private val pressProgressAnimationSpec =
+		spring(0.5f, 300f, 0.001f)
+	private val positionAnimationSpec =
+		spring(0.5f, 300f, Offset.VisibilityThreshold)
 
-    private val pressProgressAnimation =
-        Animatable(0f, 0.001f)
-    private val positionAnimation =
-        Animatable(Offset.Zero, Offset.VectorConverter, Offset.VisibilityThreshold)
+	private val pressProgressAnimation =
+		Animatable(0f, 0.001f)
+	private val positionAnimation =
+		Animatable(Offset.Zero, Offset.VectorConverter, Offset.VisibilityThreshold)
 
-    private var startPosition = Offset.Zero
-    val pressProgress: Float get() = pressProgressAnimation.value
-    val offset: Offset get() = positionAnimation.value - startPosition
+	private var startPosition = Offset.Zero
+	val pressProgress: Float get() = pressProgressAnimation.value
+	val offset: Offset get() = positionAnimation.value - startPosition
 
-    private val shader =
-        if (isTiramisu33Plus()) {
-            RuntimeShader(
-                """
+	private val shader =
+		if (isTiramisu33Plus()) {
+			RuntimeShader(
+				"""
 uniform float2 size;
 layout(color) uniform half4 color;
 uniform float radius;
@@ -56,73 +57,73 @@ half4 main(float2 coord) {
     float intensity = smoothstep(radius, radius * 0.5, dist);
     return color * intensity;
 }"""
-            )
-        } else {
-            null
-        }
+			)
+		} else {
+			null
+		}
 
-    val modifier: Modifier =
-        Modifier.drawWithContent {
-            val progress = pressProgressAnimation.value
-            if (progress > 0f) {
-                if (isTiramisu33Plus() && shader != null) {
-                    drawRect(
-                        Color.White.copy(0.08f * progress),
-                        blendMode = BlendMode.Plus
-                    )
-                    shader.apply {
-                        val position = position(size, positionAnimation.value)
-                        setFloatUniform("size", size.width, size.height)
-                        setColorUniform("color", Color.White.copy(0.15f * progress).toArgb())
-                        setFloatUniform("radius", size.minDimension * 1.5f)
-                        setFloatUniform(
-                            "position",
-                            position.x.fastCoerceIn(0f, size.width),
-                            position.y.fastCoerceIn(0f, size.height)
-                        )
-                    }
-                    drawRect(
-                        ShaderBrush(shader),
-                        blendMode = BlendMode.Plus
-                    )
-                } else {
-                    drawRect(
-                        Color.White.copy(0.25f * progress),
-                        blendMode = BlendMode.Plus
-                    )
-                }
-            }
+	val modifier: Modifier =
+		Modifier.drawWithContent {
+			val progress = pressProgressAnimation.value
+			if (progress > 0f) {
+				if (isTiramisu33Plus() && shader != null) {
+					drawRect(
+						Color.White.copy(0.08f * progress),
+						blendMode = BlendMode.Plus
+					)
+					shader.apply {
+						val position = position(size, positionAnimation.value)
+						setFloatUniform("size", size.width, size.height)
+						setColorUniform("color", Color.White.copy(0.15f * progress).toArgb())
+						setFloatUniform("radius", size.minDimension * 1.5f)
+						setFloatUniform(
+							"position",
+							position.x.fastCoerceIn(0f, size.width),
+							position.y.fastCoerceIn(0f, size.height)
+						)
+					}
+					drawRect(
+						ShaderBrush(shader),
+						blendMode = BlendMode.Plus
+					)
+				} else {
+					drawRect(
+						Color.White.copy(0.25f * progress),
+						blendMode = BlendMode.Plus
+					)
+				}
+			}
 
-            drawContent()
-        }
+			drawContent()
+		}
 
-    val gestureModifier: Modifier =
-        Modifier.pointerInput(animationScope) {
-            inspectDragGestures(
-                onDragStart = { down ->
-                    startPosition = down.position
-                    animationScope.launch {
-                        pressProgressAnimation.stop()
-                        positionAnimation.stop()
+	val gestureModifier: Modifier =
+		Modifier.pointerInput(animationScope) {
+			inspectDragGestures(
+				onDragStart = { down ->
+					startPosition = down.position
+					animationScope.launch {
+						pressProgressAnimation.stop()
+						positionAnimation.stop()
 
-                        pressProgressAnimation.animateTo(1f, pressProgressAnimationSpec)
-                        positionAnimation.snapTo(startPosition)
-                    }
-                },
-                onDragEnd = {
-                    animationScope.launch {
-                        pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec)
-                        positionAnimation.animateTo(startPosition, positionAnimationSpec)
-                    }
-                },
-                onDragCancel = {
-                    animationScope.launch {
-                        pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec)
-                        positionAnimation.animateTo(startPosition, positionAnimationSpec)
-                    }
-                }
-            ) { change, _ ->
-                animationScope.launch { positionAnimation.snapTo(change.position) }
-            }
-        }
+						async { pressProgressAnimation.animateTo(1f, pressProgressAnimationSpec) }
+						async { positionAnimation.snapTo(startPosition) }
+					}
+				},
+				onDragEnd = {
+					animationScope.launch {
+						async { pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec) }
+						async { positionAnimation.animateTo(startPosition, positionAnimationSpec) }
+					}
+				},
+				onDragCancel = {
+					animationScope.launch {
+						async { pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec) }
+						async { positionAnimation.animateTo(startPosition, positionAnimationSpec) }
+					}
+				}
+			) { change, _ ->
+				animationScope.launch { positionAnimation.snapTo(change.position) }
+			}
+		}
 }

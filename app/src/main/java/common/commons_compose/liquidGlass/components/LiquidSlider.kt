@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,7 +42,6 @@ import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.highlight.Highlight
 import com.kyant.backdrop.shadow.InnerShadow
 import com.kyant.backdrop.shadow.Shadow
-import com.kyant.capsule.ContinuousCapsule
 import common.commons_compose.liquidGlass.utils.DampedDragAnimation
 import kotlinx.coroutines.flow.collectLatest
 
@@ -112,7 +112,7 @@ fun LiquidSlider(
         Box(Modifier.layerBackdrop(trackBackdrop)) {
             Box(
                 Modifier
-                    .clip(ContinuousCapsule)
+                    .clip(RoundedCornerShape(50.dp))
                     .background(trackColor)
                     .pointerInput(animationScope) {
                         detectTapGestures { position ->
@@ -131,7 +131,7 @@ fun LiquidSlider(
 
             Box(
                 Modifier
-                    .clip(ContinuousCapsule)
+                    .clip(RoundedCornerShape(50.dp))
                     .background(accentColor)
                     .height(6f.dp)
                     .layout { measurable, constraints ->
@@ -164,7 +164,7 @@ fun LiquidSlider(
                             }
                         }
                     ),
-                    shape = { ContinuousCapsule },
+                    shape = { RoundedCornerShape(50.dp) },
                     effects = {
                         val progress = dampedDragAnimation.pressProgress
                         blur(8f.dp.toPx() * (1f - progress))

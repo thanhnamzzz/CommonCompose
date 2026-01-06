@@ -3,6 +3,7 @@ package common.commons_compose.liquidGlass.components
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,7 +41,6 @@ import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.highlight.Highlight
 import com.kyant.backdrop.shadow.InnerShadow
 import com.kyant.backdrop.shadow.Shadow
-import com.kyant.capsule.ContinuousCapsule
 import common.commons_compose.liquidGlass.utils.DampedDragAnimation
 import kotlinx.coroutines.flow.collectLatest
 
@@ -121,7 +121,7 @@ fun LiquidToggle(
 		Box(
 			Modifier
 				.layerBackdrop(trackBackdrop)
-				.clip(ContinuousCapsule)
+				.clip(RoundedCornerShape(50.dp))
 				.drawBehind {
 					val fraction = dampedDragAnimation.value
 					drawRect(lerp(trackColor, accentColor, fraction))
@@ -154,7 +154,7 @@ fun LiquidToggle(
 							}
 						}
 					),
-					shape = { ContinuousCapsule },
+					shape = { RoundedCornerShape(50.dp) },
 					effects = {
 						val progress = dampedDragAnimation.pressProgress
 						blur(8f.dp.toPx() * (1f - progress))
