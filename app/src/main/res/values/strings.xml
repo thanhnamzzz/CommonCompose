@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CommonCompose</string>
+    <string name="success">Success</string>
+    <string name="error">Error</string>
+    <string name="warning">Warning</string>
+    <string name="info">Info</string>
+    <string name="delete">Delete</string>
+    <string name="no_internet">No Internet</string>
 </resources>

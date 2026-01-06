@@ -83,7 +83,7 @@ class CToastState {
 	 * @param position The gravity of the toast on the screen.
 	 */
 	suspend fun setAndShow(
-		message: String="",
+		message: String = "",
 		title: String? = null,
 		type: CToastType = CToastType.SUCCESS,
 		duration: Long = DURATION_SHORT,
@@ -104,6 +104,24 @@ class CToastState {
 				isDarkMode = isDarkMode,
 				isFullBackground = isFullBackground,
 //				position = position
+			)
+		}
+	}
+
+	suspend fun setAndShow(
+		message: String = "",
+		title: String? = null,
+		type: CToastType = CToastType.SUCCESS,
+		duration: Long = DURATION_SHORT,
+	) {
+		mutex.withLock {
+			currentToastData = CToastData(
+				message = message,
+				title = title,
+				type = type,
+				duration = duration,
+				isDarkMode = false,
+				isFullBackground = true,
 			)
 		}
 	}
