@@ -6,4 +6,6 @@ interface Screen {
 	data object CropImage : Screen
 	data object Toast : Screen
 	data object LiquidGlass : Screen
+	data object ColorPicker : Screen
+	data object ImagePicker : Screen
 }

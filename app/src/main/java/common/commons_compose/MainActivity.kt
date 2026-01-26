@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import common.commons_compose.colorPicker.ColorPicker
+import common.commons_compose.colorPicker.ImagePicker
 import common.commons_compose.liquidGlass.LiquidView
 import common.commons_compose.ui.theme.CommonComposeTheme
 
@@ -46,6 +48,8 @@ class MainActivity : ComponentActivity() {
 										openCropImage = { backStack.add(Screen.CropImage) },
 										openToast = { backStack.add(Screen.Toast) },
 										openLiquidGlass = { backStack.add(Screen.LiquidGlass) },
+										openColorPicker = { backStack.add(Screen.ColorPicker) },
+										openImagePicker = { backStack.add(Screen.ImagePicker) },
 									)
 								}
 								entry<Screen.Dialog> { DialogScreen() }
@@ -59,6 +63,8 @@ class MainActivity : ComponentActivity() {
 										this@MainActivity
 									)
 								}
+								entry<Screen.ColorPicker> { ColorPicker() }
+								entry<Screen.ImagePicker> { ImagePicker() }
 							}
 						)
 					}
@@ -75,6 +81,8 @@ fun HomeScreen(
 	openCropImage: () -> Unit,
 	openToast: () -> Unit,
 	openLiquidGlass: () -> Unit,
+	openColorPicker: () -> Unit,
+	openImagePicker: () -> Unit,
 ) {
 	val scrollState = rememberScrollState()
 	Column(
@@ -87,5 +95,7 @@ fun HomeScreen(
 		Button(onClick = { openCropImage() }) { Text("Crop Image") }
 		Button(onClick = { openToast() }) { Text("Test CToast") }
 		Button(onClick = { openLiquidGlass() }) { Text("Liquid Glass") }
+		Button(onClick = { openColorPicker() }) { Text("Color picker") }
+		Button(onClick = { openImagePicker() }) { Text("Image picker") }
 	}
 }

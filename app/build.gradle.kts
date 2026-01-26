@@ -65,4 +65,7 @@ dependencies {
 	//LiquidGlass
 	implementation(libs.backdrop)
 //	implementation(libs.capsule)
+
+	//Color picker
+	implementation("com.github.skydoves:colorpicker-compose:1.1.3")
 }
