@@ -32,6 +32,7 @@ import common.libs.compose.toast.CToastHost
 import common.libs.compose.toast.CToastState
 import common.libs.compose.toast.CToastType
 import common.libs.compose.toast.LocalCToastConfig
+import common.libs.compose.toast.LocalToast
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,14 +41,18 @@ fun ToastScreen(
 	context: Context
 ) {
 	/** Khai báo */
-	val cToastState = remember { CToastState() }
+//	val cToastState = remember { CToastState() }
 	val scope = rememberCoroutineScope()
 
 	var isDarkMode by remember { mutableStateOf(false) }
 	val scrollState = rememberScrollState()
 
 	/** Cài đặt provider */
-	CompositionLocalProvider(LocalCToastConfig provides CToastConfiguration()) {
+//	CompositionLocalProvider(
+//		LocalCToastConfig provides CToastConfiguration(),
+//		LocalToast provides cToastState
+//	) {
+		val ct = LocalToast.current
 		Column(
 			modifier = modifier
 				.fillMaxSize()
@@ -74,7 +79,7 @@ fun ToastScreen(
 				onClick = {
 					/** Show */
 					scope.launch {
-						cToastState.setAndShow(
+						ct.setAndShow(
 							title = context.getString(R.string.app_name),
 							message = context.getString(R.string.success),
 							type = CToastType.SUCCESS,
@@ -94,7 +99,7 @@ fun ToastScreen(
 			Button(
 				onClick = {
 					scope.launch {
-						cToastState.setAndShow(
+						ct.setAndShow(
 							title = context.getString(R.string.app_name),
 							message = "Message Error",
 							type = CToastType.ERROR,
@@ -114,7 +119,7 @@ fun ToastScreen(
 			Button(
 				onClick = {
 					scope.launch {
-						cToastState.setAndShow(
+						ct.setAndShow(
 							title = context.getString(R.string.app_name),
 							message = "Message Warning",
 							type = CToastType.WARNING,
@@ -134,7 +139,7 @@ fun ToastScreen(
 			Button(
 				onClick = {
 					scope.launch {
-						cToastState.setAndShow(
+						ct.setAndShow(
 							title = context.getString(R.string.app_name),
 							message = "Message Info",
 							type = CToastType.INFO,
@@ -154,6 +159,7 @@ fun ToastScreen(
 		}
 
 		/** Show */
-		CToastHost(hostState = cToastState, modifier = Modifier.systemBarsPadding())
-	}
+//		CToastHost(hostState = cToastState, modifier = Modifier.systemBarsPadding())
+//		CToastHost(modifier = Modifier.systemBarsPadding())
+//	}
 }

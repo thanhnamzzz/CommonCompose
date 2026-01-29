@@ -116,7 +116,7 @@ fun ContentCropImage(modifier: Modifier = Modifier) {
 				)
 			}
 		}
-		CToastHost(cToastState, Modifier.systemBarsPadding())
+		CToastHost(hostState = cToastState, modifier = Modifier.systemBarsPadding())
 	}
 }
 

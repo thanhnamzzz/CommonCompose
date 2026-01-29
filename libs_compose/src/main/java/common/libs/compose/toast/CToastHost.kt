@@ -51,8 +51,8 @@ import kotlinx.coroutines.delay
  */
 @Composable
 fun CToastHost(
-    hostState: CToastState,
-    modifier: Modifier = Modifier,
+	modifier: Modifier = Modifier,
+    hostState: CToastState = LocalToast.current,
     // Customize the animations from the outside for maximum flexibility.
     enter: EnterTransition = fadeIn() + slideInVertically(),
     exit: ExitTransition = fadeOut() + slideOutVertically()

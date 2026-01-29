@@ -6,6 +6,7 @@ package common.libs.compose.toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import common.libs.compose.R
 
@@ -87,3 +88,4 @@ const val DURATION_LENGTH = 3400L
  * Use this to override the default configuration for a specific part of your app.
  */
 val LocalCToastConfig = staticCompositionLocalOf { CToastConfiguration() }
+val LocalToast = compositionLocalOf { CToastState() }
