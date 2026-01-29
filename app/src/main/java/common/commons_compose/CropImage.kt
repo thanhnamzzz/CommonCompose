@@ -9,14 +9,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,11 +35,8 @@ import com.mr0xf00.easycrop.crop
 import com.mr0xf00.easycrop.rememberImageCropper
 import com.mr0xf00.easycrop.rememberImagePicker
 import com.mr0xf00.easycrop.ui.ImageCropperDialog
-import common.libs.compose.toast.CToastConfiguration
-import common.libs.compose.toast.CToastHost
-import common.libs.compose.toast.CToastState
 import common.libs.compose.toast.CToastType
-import common.libs.compose.toast.LocalCToastConfig
+import common.libs.compose.toast.LocalToast
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -51,6 +46,7 @@ fun ContentCropImage(modifier: Modifier = Modifier) {
 	var error by remember { mutableStateOf<CropError?>(null) }
 	val context = LocalContext.current
 	val scope = rememberCoroutineScope()
+	val toast = LocalToast.current
 
 	val imageCropper = rememberImageCropper()
 	val imagePicker = rememberImagePicker(onImage = { uri ->
@@ -84,39 +80,33 @@ fun ContentCropImage(modifier: Modifier = Modifier) {
 			}
 		}
 	}
+	ContentCropImage(
+		cropState = imageCropper.cropState,
+		loadingStatus = imageCropper.loadingStatus,
+		selectedImage = selectedImage,
+		onPick = { imagePicker.pick() },
+		onTakePicture = {
+			imageUri = FileProvider.getUriForFile(
+				context,
+				"${context.packageName}.provider",
+				imageFile
+			)
+			cameraLauncher.launch(imageUri!!)
+		},
+		modifier = modifier
+	)
 
-	val cToastState = remember { CToastState() }
-
-	CompositionLocalProvider(LocalCToastConfig provides CToastConfiguration()) {
-		ContentCropImage(
-			cropState = imageCropper.cropState,
-			loadingStatus = imageCropper.loadingStatus,
-			selectedImage = selectedImage,
-			onPick = { imagePicker.pick() },
-			onTakePicture = {
-				imageUri = FileProvider.getUriForFile(
-					context,
-					"${context.packageName}.provider",
-					imageFile
-				)
-				cameraLauncher.launch(imageUri!!)
-			},
-			modifier = modifier
-		)
-
-		error?.let {
-			scope.launch {
-				cToastState.setAndShow(
-					title = "Error",
-					message = when (it) {
-						CropError.LoadingError -> "Error while opening the image !"
-						CropError.SavingError -> "Error while saving the image !"
-					},
-					type = CToastType.ERROR
-				)
-			}
+	error?.let {
+		scope.launch {
+			toast.setAndShow(
+				title = "Error",
+				message = when (it) {
+					CropError.LoadingError -> "Error while opening the image !"
+					CropError.SavingError -> "Error while saving the image !"
+				},
+				type = CToastType.ERROR
+			)
 		}
-		CToastHost(hostState = cToastState, modifier = Modifier.systemBarsPadding())
 	}
 }
 
