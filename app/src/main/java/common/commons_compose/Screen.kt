@@ -1,11 +1,24 @@
 package common.commons_compose
 
-interface Screen {
-	data object Home : Screen
-	data object Dialog : Screen
-	data object CropImage : Screen
-	data object Toast : Screen
-	data object LiquidGlass : Screen
-	data object ColorPicker : Screen
-	data object ImagePicker : Screen
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed interface Screen : NavKey {
+	@Serializable
+	data object Home : Screen, NavKey
+	@Serializable
+	data object Dialog : Screen, NavKey
+	@Serializable
+	data object CropImage : Screen, NavKey
+	@Serializable
+	data object Toast : Screen, NavKey
+	@Serializable
+	data object LiquidGlass : Screen, NavKey
+	@Serializable
+	data object ColorPicker : Screen, NavKey
+	@Serializable
+	data object ImagePicker : Screen, NavKey
+	@Serializable
+	data object AnimationView : Screen, NavKey
 }

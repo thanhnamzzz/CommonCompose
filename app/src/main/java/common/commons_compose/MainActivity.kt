@@ -31,43 +31,8 @@ class MainActivity : ComponentActivity() {
 		setContent {
 			CommonComposeTheme {
 				Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-					val backStack = remember { mutableStateListOf<Screen>(Screen.Home) }
-					Column(
-						horizontalAlignment = Alignment.CenterHorizontally
-					) {
-						NavDisplay(
-							modifier = Modifier.padding(innerPadding),
-							backStack = backStack,
-							onBack = {
-								backStack.removeLastOrNull()
-							},
-							entryProvider = entryProvider {
-								entry<Screen.Home> {
-									HomeScreen(
-										openDialog = { backStack.add(Screen.Dialog) },
-										openCropImage = { backStack.add(Screen.CropImage) },
-										openToast = { backStack.add(Screen.Toast) },
-										openLiquidGlass = { backStack.add(Screen.LiquidGlass) },
-										openColorPicker = { backStack.add(Screen.ColorPicker) },
-										openImagePicker = { backStack.add(Screen.ImagePicker) },
-									)
-								}
-								entry<Screen.Dialog> { DialogScreen() }
-								entry<Screen.Toast> {
-									ToastScreen(Modifier.fillMaxSize(), this@MainActivity)
-								}
-								entry<Screen.CropImage> { ContentCropImage(Modifier.fillMaxSize()) }
-								entry<Screen.LiquidGlass> {
-									LiquidView(
-										Modifier.fillMaxSize(),
-										this@MainActivity
-									)
-								}
-								entry<Screen.ColorPicker> { ColorPicker() }
-								entry<Screen.ImagePicker> { ImagePicker() }
-							}
-						)
-					}
+//					NavigationType1(innerPadding)
+					NavigationType2(innerPadding)
 				}
 			}
 		}
@@ -83,6 +48,7 @@ fun HomeScreen(
 	openLiquidGlass: () -> Unit,
 	openColorPicker: () -> Unit,
 	openImagePicker: () -> Unit,
+	openAnimationView: () -> Unit,
 ) {
 	val scrollState = rememberScrollState()
 	Column(
@@ -97,5 +63,6 @@ fun HomeScreen(
 		Button(onClick = { openLiquidGlass() }) { Text("Liquid Glass") }
 		Button(onClick = { openColorPicker() }) { Text("Color picker") }
 		Button(onClick = { openImagePicker() }) { Text("Image picker") }
+		Button(onClick = { openAnimationView() }) { Text("Animation View") }
 	}
 }
