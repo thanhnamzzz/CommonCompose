@@ -1,5 +1,6 @@
 package common.libs.compose.liquidGlass.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,17 +48,18 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LiquidToggle(
+    modifier: Modifier = Modifier,
+    backdrop: Backdrop,
 	selected: () -> Boolean,
 	onSelect: (Boolean) -> Unit,
-	backdrop: Backdrop,
-	modifier: Modifier = Modifier,
-	paddingTrack: Dp = 2.dp,
+    onClickToggle: () -> Unit = {},
 	accentColor: Color = Color(0xFF34C759),
 	trackColor: Color = Color(0xFF787878).copy(0.36f),
 	thumbColor: Color = Color.White,
 	thumbColorShadow: Color = Color.Black,
 	shapeTrack: Shape = RoundedCornerShape(50.dp),
 	shapeThumb: Shape = RoundedCornerShape(50.dp),
+    paddingTrack: Dp = 2.dp,
 	trackHeigh: Dp = 28.dp,
 	trackWidth: Dp = 64.dp,
 	thumbHeight: Dp = 24.dp,
@@ -132,7 +134,8 @@ fun LiquidToggle(
 	val trackBackdrop = rememberLayerBackdrop()
 
 	Box(
-		modifier,
+		modifier = modifier
+            .clickable(enabled = true, onClick = onClickToggle),
 		contentAlignment = Alignment.CenterStart
 	) {
 		//Track

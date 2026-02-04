@@ -152,6 +152,7 @@ fun LiquidView(
                         selected = { selected },
                         onSelect = { selected = it },
                         backdrop = liquidDrop,
+                        onClickToggle = { selected = !selected }
                     )
                     Spacer(Modifier.size(5.dp))
                     LiquidToggle(
@@ -168,7 +169,8 @@ fun LiquidView(
                         thumbWidth = 25.dp,
                         //dragDistance là quãng đường di chuyển của thumb = trackWidth - 2 * paddingTrack - thumbWidth
                         dragDistance = 25.dp,
-                        scalePressed = 1.8f
+                        scalePressed = 1.8f,
+                        onClickToggle = { selected = !selected }
                     )
                     Spacer(
                         Modifier
@@ -179,6 +181,7 @@ fun LiquidView(
                     LiquidToggle(
                         selected = { selected },
                         onSelect = { selected = it },
+                        onClickToggle = { selected = !selected },
                         backdrop = rememberRectBackdrop { drawRect(backgroundColor) },
 //						backdrop = rememberCanvasBackdrop { drawRect(backgroundColor) },
                     )
