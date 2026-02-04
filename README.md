@@ -14,3 +14,6 @@ dependencies {
 }
 ```
 #### Similar [`Commons`](https://github.com/thanhnamzzz/Commons.git)
+
+#### Version 2.0
+Update LiquidGlass for Button, Toggle, Slider, BottomTabs
