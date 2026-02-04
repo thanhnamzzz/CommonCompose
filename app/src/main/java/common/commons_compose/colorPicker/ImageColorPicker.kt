@@ -31,11 +31,13 @@ import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import common.commons_compose.R
 
 @Composable
-fun ImagePicker() {
+fun ImagePicker(
+    modifier: Modifier = Modifier
+) {
 	val controller = rememberColorPickerController()
 	var result by remember { mutableStateOf("") }
 
-	Column(modifier = Modifier.fillMaxSize()) {
+	Column(modifier = modifier.fillMaxSize()) {
 		ImageColorPicker(
 			modifier = Modifier
 				.fillMaxWidth()

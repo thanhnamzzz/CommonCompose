@@ -18,6 +18,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import common.commons_compose.animation.AnimationView
 import common.commons_compose.colorPicker.ColorPicker
 import common.commons_compose.colorPicker.ImagePicker
+import common.commons_compose.liquidGlass.LiquidLazyColumn
 import common.commons_compose.liquidGlass.LiquidView
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -69,15 +70,15 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 					}
 
 					is Screen.Dialog -> {
-						NavEntry(key) { DialogScreen() }
+						NavEntry(key) { DialogScreen(Modifier.padding(innerPadding)) }
 					}
 
 					is Screen.Toast -> {
-						NavEntry(key) { ToastScreen(Modifier.fillMaxSize(), this@NavigationType2) }
+						NavEntry(key) { ToastScreen(Modifier.fillMaxSize().padding(innerPadding), this@NavigationType2) }
 					}
 
 					is Screen.CropImage -> {
-						NavEntry(key) { ContentCropImage(Modifier.fillMaxSize()) }
+						NavEntry(key) { ContentCropImage(Modifier.fillMaxSize().padding(innerPadding)) }
 					}
 
 					is Screen.LiquidGlass -> {
@@ -85,7 +86,10 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 							LiquidView(
 								modifier = Modifier.fillMaxSize(),
 								innerPadding = innerPadding,
-								context = this@NavigationType2
+								context = this@NavigationType2,
+                                openLazyColumn = {
+                                    backStack.add(Screen.LazyColumnLiquid)
+                                }
 							)
 						}
 					}
@@ -95,12 +99,16 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 					}
 
 					is Screen.ImagePicker -> {
-						NavEntry(key) { ImagePicker() }
+						NavEntry(key) { ImagePicker(Modifier.padding(innerPadding)) }
 					}
 
 					is Screen.AnimationView -> {
-						NavEntry(key) { AnimationView() }
+						NavEntry(key) { AnimationView(modifier = Modifier.padding(innerPadding)) }
 					}
+
+                    is Screen.LazyColumnLiquid -> {
+                        NavEntry(key) { LiquidLazyColumn() }
+                    }
 
 					else -> error("Unknown key: $key")
 				}

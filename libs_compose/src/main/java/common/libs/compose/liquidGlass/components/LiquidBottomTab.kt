@@ -1,9 +1,8 @@
 package common.libs.compose.liquidGlass.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,35 +16,33 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 
-internal val LocalLiquidBottomTabScale =
-	staticCompositionLocalOf { { 1f } }
+internal val LocalLiquidBottomTabScale = staticCompositionLocalOf { { 1f } }
 
 @Composable
 fun RowScope.LiquidBottomTab(
-	onClick: () -> Unit,
-	modifier: Modifier = Modifier,
-	shape: Shape = RoundedCornerShape(50.dp),
-	content: @Composable ColumnScope.() -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(50.dp),
+    content: @Composable BoxScope.() -> Unit
 ) {
-	val scale = LocalLiquidBottomTabScale.current
-	Column(
-		modifier
-			.clip(shape)
-			.clickable(
-				interactionSource = null,
-				indication = null,
-				role = Role.Tab,
-				onClick = onClick
-			)
-			.fillMaxHeight()
-			.weight(1f)
-			.graphicsLayer {
-				val scale = scale()
-				scaleX = scale
-				scaleY = scale
-			},
-		verticalArrangement = Arrangement.spacedBy(2f.dp, Alignment.CenterVertically),
-		horizontalAlignment = Alignment.CenterHorizontally,
-		content = content
-	)
+    val scale = LocalLiquidBottomTabScale.current
+    Box(
+        modifier
+            .clip(shape)
+            .clickable(
+                interactionSource = null,
+                indication = null,
+                role = Role.Tab,
+                onClick = onClick
+            )
+            .fillMaxHeight()
+            .weight(1f)
+            .graphicsLayer {
+                val scale = scale()
+                scaleX = scale
+                scaleY = scale
+            },
+        contentAlignment = Alignment.Center,
+        content = content
+    )
 }

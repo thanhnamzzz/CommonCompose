@@ -16,6 +16,8 @@ sealed interface Screen : NavKey {
 	@Serializable
 	data object LiquidGlass : Screen, NavKey
 	@Serializable
+	data object LazyColumnLiquid : Screen, NavKey
+	@Serializable
 	data object ColorPicker : Screen, NavKey
 	@Serializable
 	data object ImagePicker : Screen, NavKey

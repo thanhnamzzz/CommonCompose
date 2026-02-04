@@ -60,29 +60,34 @@ import kotlin.math.sign
 
 @Composable
 fun LiquidBottomTabs(
-	selectedTabIndex: () -> Int,
-	onTabSelected: (index: Int) -> Unit,
-	backdrop: Backdrop,
-	tabsCount: Int,
-	modifier: Modifier = Modifier,
-	shape: Shape = RoundedCornerShape(50.dp),
-	accentColor: Color = Color(0xFF0088FF),
-	containerColor: Color = Color(0xFFFAFAFA).copy(0.4f),
-	bottomTabHeight: Dp = 64.dp,
-	selectedTabHeight: Dp = 56.dp,
-	//paddingValues khoảng padding start
-	paddingValues: Dp = 4.dp,
-	//tabPadding này phải bằng 2 lần paddingValues
-	tabPadding: Dp = 8.dp,
-	tabSelected: Color? = null,
-	visibilityThreshold: Float = 0.001f,
-	scaleInit: Float = 1f,
-	scalePressed: Float = 1.5f,
-	content: @Composable RowScope.() -> Unit
+    selectedTabIndex: () -> Int,
+    onTabSelected: (index: Int) -> Unit,
+    backdrop: Backdrop,
+    tabsCount: Int,
+    modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(50.dp),
+    accentColor: Color = Color(0xFF0088FF),
+    containerColor: Color = Color(0xFFFAFAFA).copy(0.4f),
+    bottomTabHeight: Dp = 64.dp,
+    selectedTabHeight: Dp = 56.dp,
+    //paddingValues khoảng padding start
+    paddingValues: Dp = 4.dp,
+    //tabPadding này phải bằng 2 lần paddingValues
+    tabPadding: Dp = 8.dp,
+    tabSelected: Color? = null,
+    visibilityThreshold: Float = 0.001f,
+    scaleInit: Float = 1f,
+    scalePressed: Float = 1.5f,
+    blurRadius: Dp = 8.dp,
+//    refractionHeight: Dp = 24.dp,
+//    refractionAmount: Dp = 24.dp,
+    refractionHeight: Float = 70f,
+    refractionAmount: Float = 135f,
+    content: @Composable RowScope.() -> Unit
 ) {
-	val isLightTheme = !isSystemInDarkTheme()
-	val backgroundTabSelected =
-		tabSelected ?: if (isLightTheme) Color.Black.copy(0.1f) else Color.White.copy(0.1f)
+    val isLightTheme = !isSystemInDarkTheme()
+    val backgroundTabSelected =
+        tabSelected ?: if (isLightTheme) Color.Black.copy(0.1f) else Color.White.copy(0.1f)
 //	val accentColor =
 //		if (isLightTheme) Color(0xFF0088FF)
 //		else Color(0xFF0091FF)
@@ -90,210 +95,214 @@ fun LiquidBottomTabs(
 //		if (isLightTheme) Color(0xFFFAFAFA).copy(0.4f)
 //		else Color(0xFF121212).copy(0.4f)
 
-	val tabsBackdrop = rememberLayerBackdrop()
+    val tabsBackdrop = rememberLayerBackdrop()
 
-	BoxWithConstraints(
-		modifier,
-		contentAlignment = Alignment.CenterStart
-	) {
-		val density = LocalDensity.current
-		val tabWidth = with(density) {
-			(constraints.maxWidth.toFloat() - tabPadding.toPx()) / tabsCount
-		}
+    BoxWithConstraints(
+        modifier,
+        contentAlignment = Alignment.CenterStart
+    ) {
+        val density = LocalDensity.current
+        val tabWidth = with(density) {
+            (constraints.maxWidth.toFloat() - tabPadding.toPx()) / tabsCount
+        }
 
-		val offsetAnimation = remember { Animatable(0f) }
-		val panelOffset by remember(density) {
-			derivedStateOf {
-				val fraction = (offsetAnimation.value / constraints.maxWidth).fastCoerceIn(-1f, 1f)
-				with(density) {
-					4f.dp.toPx() * fraction.sign * EaseOut.transform(abs(fraction))
-				}
-			}
-		}
+        val offsetAnimation = remember { Animatable(0f) }
+        val panelOffset by remember(density) {
+            derivedStateOf {
+                val fraction = (offsetAnimation.value / constraints.maxWidth).fastCoerceIn(-1f, 1f)
+                with(density) {
+                    4f.dp.toPx() * fraction.sign * EaseOut.transform(abs(fraction))
+                }
+            }
+        }
 
-		val isLtr = LocalLayoutDirection.current == LayoutDirection.Ltr
-		val animationScope = rememberCoroutineScope()
-		var currentIndex by remember(selectedTabIndex) {
-			mutableIntStateOf(selectedTabIndex())
-		}
-		val dampedDragAnimation = remember(animationScope) {
-			DampedDragAnimation(
-				animationScope = animationScope,
-				initialValue = selectedTabIndex().toFloat(),
-				valueRange = 0f..(tabsCount - 1).toFloat(),
-				visibilityThreshold = visibilityThreshold,
-				initialScale = scaleInit,
-				pressedScale = scalePressed,
-				onDragStarted = {},
-				onDragStopped = {
-					val targetIndex = targetValue.fastRoundToInt().fastCoerceIn(0, tabsCount - 1)
-					currentIndex = targetIndex
-					animateToValue(targetIndex.toFloat())
-					animationScope.launch {
-						offsetAnimation.animateTo(
-							0f,
-							spring(1f, 300f, 0.5f)
-						)
-					}
-				},
-				onDrag = { _, dragAmount ->
-					updateValue(
-						(targetValue + dragAmount.x / tabWidth * if (isLtr) 1f else -1f)
-							.fastCoerceIn(0f, (tabsCount - 1).toFloat())
-					)
-					animationScope.launch {
-						offsetAnimation.snapTo(offsetAnimation.value + dragAmount.x)
-					}
-				}
-			)
-		}
-		LaunchedEffect(selectedTabIndex) {
-			snapshotFlow { selectedTabIndex() }
-				.collectLatest { index ->
-					currentIndex = index
-				}
-		}
-		LaunchedEffect(dampedDragAnimation) {
-			snapshotFlow { currentIndex }
-				.drop(1)
-				.collectLatest { index ->
-					dampedDragAnimation.animateToValue(index.toFloat())
-					onTabSelected(index)
-				}
-		}
+        val isLtr = LocalLayoutDirection.current == LayoutDirection.Ltr
+        val animationScope = rememberCoroutineScope()
+        var currentIndex by remember(selectedTabIndex) {
+            mutableIntStateOf(selectedTabIndex())
+        }
+        val dampedDragAnimation = remember(animationScope) {
+            DampedDragAnimation(
+                animationScope = animationScope,
+                initialValue = selectedTabIndex().toFloat(),
+                valueRange = 0f..(tabsCount - 1).toFloat(),
+                visibilityThreshold = visibilityThreshold,
+                initialScale = scaleInit,
+                pressedScale = scalePressed,
+                onDragStarted = {},
+                onDragStopped = {
+                    val targetIndex = targetValue.fastRoundToInt().fastCoerceIn(0, tabsCount - 1)
+                    currentIndex = targetIndex
+                    animateToValue(targetIndex.toFloat())
+                    animationScope.launch {
+                        offsetAnimation.animateTo(
+                            0f,
+                            spring(1f, 300f, 0.5f)
+                        )
+                    }
+                },
+                onDrag = { _, dragAmount ->
+                    updateValue(
+                        (targetValue + dragAmount.x / tabWidth * if (isLtr) 1f else -1f)
+                            .fastCoerceIn(0f, (tabsCount - 1).toFloat())
+                    )
+                    animationScope.launch {
+                        offsetAnimation.snapTo(offsetAnimation.value + dragAmount.x)
+                    }
+                }
+            )
+        }
+        LaunchedEffect(selectedTabIndex) {
+            snapshotFlow { selectedTabIndex() }
+                .collectLatest { index ->
+                    currentIndex = index
+                }
+        }
+        LaunchedEffect(dampedDragAnimation) {
+            snapshotFlow { currentIndex }
+                .drop(1)
+                .collectLatest { index ->
+                    dampedDragAnimation.animateToValue(index.toFloat())
+                    onTabSelected(index)
+                }
+        }
 
-		val interactiveHighlight = remember(animationScope) {
-			TouchHighlight(
-				animationScope = animationScope,
-				position = { size, _ ->
-					Offset(
-						if (isLtr) (dampedDragAnimation.value + 0.5f) * tabWidth + panelOffset
-						else size.width - (dampedDragAnimation.value + 0.5f) * tabWidth + panelOffset,
-						size.height / 2f
-					)
-				}
-			)
-		}
+        val interactiveHighlight = remember(animationScope) {
+            TouchHighlight(
+                animationScope = animationScope,
+                position = { size, _ ->
+                    Offset(
+                        if (isLtr) (dampedDragAnimation.value + 0.5f) * tabWidth + panelOffset
+                        else size.width - (dampedDragAnimation.value + 0.5f) * tabWidth + panelOffset,
+                        size.height / 2f
+                    )
+                }
+            )
+        }
 
-		Row(
-			Modifier
-				.graphicsLayer { translationX = panelOffset }
-				.drawBackdrop(
-					backdrop = backdrop,
-					shape = { shape },
-					effects = {
-						vibrancy()
-						blur(8f.dp.toPx())
-						lens(24f.dp.toPx(), 24f.dp.toPx())
-					},
-					layerBlock = {
-						val progress = dampedDragAnimation.pressProgress
-						val scale = lerp(1f, 1f + 16f.dp.toPx() / size.width, progress)
-						scaleX = scale
-						scaleY = scale
-					},
-					onDrawSurface = { drawRect(containerColor) }
-				)
-				.then(interactiveHighlight.modifier)
-				.height(bottomTabHeight)
-				.fillMaxWidth()
-				.padding(paddingValues),
-			verticalAlignment = Alignment.CenterVertically,
-			content = content
-		)
+        Row(
+            Modifier
+                .graphicsLayer { translationX = panelOffset }
+                .drawBackdrop(
+                    backdrop = backdrop,
+                    shape = { shape },
+                    effects = {
+                        vibrancy()
+                        blur(blurRadius.toPx())
+                        lens(
+                            refractionHeight = refractionHeight,
+                            refractionAmount = refractionAmount,
+                            depthEffect = true
+                        )
+                    },
+                    layerBlock = {
+                        val progress = dampedDragAnimation.pressProgress
+                        val scale = lerp(1f, 1f + 16f.dp.toPx() / size.width, progress)
+                        scaleX = scale
+                        scaleY = scale
+                    },
+                    onDrawSurface = { drawRect(containerColor) }
+                )
+                .then(interactiveHighlight.modifier)
+                .height(bottomTabHeight)
+                .fillMaxWidth()
+                .padding(paddingValues),
+            verticalAlignment = Alignment.CenterVertically,
+            content = content
+        )
 
-		CompositionLocalProvider(
-			LocalLiquidBottomTabScale provides {
-				lerp(1f, 1.2f, dampedDragAnimation.pressProgress)
-			}
-		) {
-			Row(
-				Modifier
-					.clearAndSetSemantics {}
-					.alpha(0f)
-					.layerBackdrop(tabsBackdrop)
-					.graphicsLayer {
-						translationX = panelOffset
-					}
-					.drawBackdrop(
-						backdrop = backdrop,
-						shape = { shape },
-						effects = {
-							val progress = dampedDragAnimation.pressProgress
-							vibrancy()
-							blur(8f.dp.toPx())
-							lens(
-								24f.dp.toPx() * progress,
-								24f.dp.toPx() * progress
-							)
-						},
-						highlight = {
-							val progress = dampedDragAnimation.pressProgress
-							Highlight.Default.copy(alpha = progress)
-						},
-						onDrawSurface = { drawRect(containerColor) }
-					)
-					.then(interactiveHighlight.modifier)
-					.height(selectedTabHeight)
-					.fillMaxWidth()
-					.padding(horizontal = paddingValues)
-					.graphicsLayer(colorFilter = ColorFilter.tint(accentColor)),
-				verticalAlignment = Alignment.CenterVertically,
-				content = content
-			)
-		}
+        CompositionLocalProvider(
+            LocalLiquidBottomTabScale provides {
+                lerp(1f, 1.2f, dampedDragAnimation.pressProgress)
+            }
+        ) {
+            Row(
+                Modifier
+                    .clearAndSetSemantics {}
+                    .alpha(0f)
+                    .layerBackdrop(tabsBackdrop)
+                    .graphicsLayer {
+                        translationX = panelOffset
+                    }
+                    .drawBackdrop(
+                        backdrop = backdrop,
+                        shape = { shape },
+                        effects = {
+                            val progress = dampedDragAnimation.pressProgress
+                            vibrancy()
+                            blur(blurRadius.toPx())
+                            lens(
+                                refractionHeight * progress,
+                                refractionAmount * progress
+                            )
+                        },
+                        highlight = {
+                            val progress = dampedDragAnimation.pressProgress
+                            Highlight.Default.copy(alpha = progress)
+                        },
+                        onDrawSurface = { drawRect(containerColor) }
+                    )
+                    .then(interactiveHighlight.modifier)
+                    .height(selectedTabHeight)
+                    .fillMaxWidth()
+                    .padding(horizontal = paddingValues)
+                    .graphicsLayer(colorFilter = ColorFilter.tint(accentColor)),
+                verticalAlignment = Alignment.CenterVertically,
+                content = content
+            )
+        }
 
-		Box(
-			Modifier
-				.padding(horizontal = paddingValues)
-				.graphicsLayer {
-					translationX =
-						if (isLtr) dampedDragAnimation.value * tabWidth + panelOffset
-						else size.width - (dampedDragAnimation.value + 1f) * tabWidth + panelOffset
-				}
-				.then(interactiveHighlight.gestureModifier)
-				.then(dampedDragAnimation.modifier)
-				.drawBackdrop(
-					backdrop = rememberCombinedBackdrop(backdrop, tabsBackdrop),
-					shape = { shape },
-					effects = {
-						val progress = dampedDragAnimation.pressProgress
-						lens(
-							10f.dp.toPx() * progress,
-							14f.dp.toPx() * progress,
-							chromaticAberration = true
-						)
-					},
-					highlight = {
-						val progress = dampedDragAnimation.pressProgress
-						Highlight.Default.copy(alpha = progress)
-					},
-					shadow = {
-						val progress = dampedDragAnimation.pressProgress
-						Shadow(alpha = progress)
-					},
-					innerShadow = {
-						val progress = dampedDragAnimation.pressProgress
-						InnerShadow(
-							radius = 8f.dp * progress,
-							alpha = progress
-						)
-					},
-					layerBlock = {
-						scaleX = dampedDragAnimation.scaleX
-						scaleY = dampedDragAnimation.scaleY
-						val velocity = dampedDragAnimation.velocity / 10f
-						scaleX /= 1f - (velocity * 0.75f).fastCoerceIn(-0.2f, 0.2f)
-						scaleY *= 1f - (velocity * 0.25f).fastCoerceIn(-0.2f, 0.2f)
-					},
-					onDrawSurface = {
-						val progress = dampedDragAnimation.pressProgress
-						drawRect(backgroundTabSelected, alpha = 1f - progress)
-						drawRect(Color.Black.copy(alpha = 0.03f * progress))
-					}
-				)
-				.height(selectedTabHeight)
-				.fillMaxWidth(1f / tabsCount)
-		)
-	}
+        Box(
+            Modifier
+                .padding(horizontal = paddingValues)
+                .graphicsLayer {
+                    translationX =
+                        if (isLtr) dampedDragAnimation.value * tabWidth + panelOffset
+                        else size.width - (dampedDragAnimation.value + 1f) * tabWidth + panelOffset
+                }
+                .then(interactiveHighlight.gestureModifier)
+                .then(dampedDragAnimation.modifier)
+                .drawBackdrop(
+                    backdrop = rememberCombinedBackdrop(backdrop, tabsBackdrop),
+                    shape = { shape },
+                    effects = {
+                        val progress = dampedDragAnimation.pressProgress
+                        lens(
+                            10f.dp.toPx() * progress,
+                            14f.dp.toPx() * progress,
+                            chromaticAberration = true
+                        )
+                    },
+                    highlight = {
+                        val progress = dampedDragAnimation.pressProgress
+                        Highlight.Default.copy(alpha = progress)
+                    },
+                    shadow = {
+                        val progress = dampedDragAnimation.pressProgress
+                        Shadow(alpha = progress)
+                    },
+                    innerShadow = {
+                        val progress = dampedDragAnimation.pressProgress
+                        InnerShadow(
+                            radius = 8f.dp * progress,
+                            alpha = progress
+                        )
+                    },
+                    layerBlock = {
+                        scaleX = dampedDragAnimation.scaleX
+                        scaleY = dampedDragAnimation.scaleY
+                        val velocity = dampedDragAnimation.velocity / 10f
+                        scaleX /= 1f - (velocity * 0.75f).fastCoerceIn(-0.2f, 0.2f)
+                        scaleY *= 1f - (velocity * 0.25f).fastCoerceIn(-0.2f, 0.2f)
+                    },
+                    onDrawSurface = {
+                        val progress = dampedDragAnimation.pressProgress
+                        drawRect(backgroundTabSelected, alpha = 1f - progress)
+                        drawRect(Color.Black.copy(alpha = 0.03f * progress))
+                    }
+                )
+                .height(selectedTabHeight)
+                .fillMaxWidth(1f / tabsCount)
+        )
+    }
 }

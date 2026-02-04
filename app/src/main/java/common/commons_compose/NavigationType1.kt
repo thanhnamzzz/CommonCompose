@@ -49,7 +49,10 @@ fun Context.NavigationType1(innerPadding: PaddingValues) {
 					LiquidView(
 						modifier = Modifier.fillMaxSize(),
 						innerPadding = innerPadding,
-						context = this@NavigationType1
+						context = this@NavigationType1,
+                        openLazyColumn = {
+                            backStack.add(Screen.LazyColumnLiquid)
+                        }
 					)
 				}
 				entry<Screen.ColorPicker> { ColorPicker() }
