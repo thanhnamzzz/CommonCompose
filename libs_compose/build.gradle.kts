@@ -44,6 +44,10 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
+
+	//LiquidGlass
+	api(libs.backdrop)
+//	implementation(libs.capsule)
 }
 
 publishing.publications {

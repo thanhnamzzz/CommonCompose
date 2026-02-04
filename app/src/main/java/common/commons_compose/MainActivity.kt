@@ -6,23 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.ui.NavDisplay
-import common.commons_compose.colorPicker.ColorPicker
-import common.commons_compose.colorPicker.ImagePicker
-import common.commons_compose.liquidGlass.LiquidView
+import androidx.compose.ui.graphics.Color
 import common.commons_compose.ui.theme.CommonComposeTheme
+import common.libs.compose.extensions.SetNavigationBarContentColor
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +24,7 @@ class MainActivity : ComponentActivity() {
 		enableEdgeToEdge()
 		setContent {
 			CommonComposeTheme {
+				window.SetNavigationBarContentColor(Color.Transparent)
 				Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 //					NavigationType1(innerPadding)
 					NavigationType2(innerPadding)

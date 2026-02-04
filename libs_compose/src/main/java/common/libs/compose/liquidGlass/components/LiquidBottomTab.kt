@@ -1,4 +1,4 @@
-package common.commons_compose.liquidGlass.components
+package common.libs.compose.liquidGlass.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package common.commons_compose.liquidGlass.utils
+package common.libs.compose.liquidGlass.utils
 
 import android.graphics.RuntimeShader
 import androidx.compose.animation.core.Animatable

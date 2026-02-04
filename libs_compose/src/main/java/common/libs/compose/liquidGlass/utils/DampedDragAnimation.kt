@@ -1,4 +1,4 @@
-package common.commons_compose.liquidGlass.utils
+package common.libs.compose.liquidGlass.utils
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
@@ -22,9 +22,9 @@ class DampedDragAnimation(
     private val animationScope: CoroutineScope,
     val initialValue: Float,
     val valueRange: ClosedRange<Float>,
-    val visibilityThreshold: Float,
-    val initialScale: Float,
-    val pressedScale: Float,
+    val visibilityThreshold: Float = 0.01f,
+    val initialScale: Float = 1f,
+    val pressedScale: Float = 1.2f,
     val onDragStarted: DampedDragAnimation.(position: Offset) -> Unit,
     val onDragStopped: DampedDragAnimation.() -> Unit,
     val onDrag: DampedDragAnimation.(size: IntSize, dragAmount: Offset) -> Unit,
@@ -78,7 +78,7 @@ class DampedDragAnimation(
                 onDragStopped()
                 release()
             }
-        ) { change, dragAmount ->
+        ) { _, dragAmount ->
             onDrag(size, dragAmount)
         }
     }

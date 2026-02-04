@@ -1,4 +1,4 @@
-package common.commons_compose.liquidGlass.components
+package common.libs.compose.liquidGlass.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOut
@@ -50,8 +50,8 @@ import com.kyant.backdrop.effects.vibrancy
 import com.kyant.backdrop.highlight.Highlight
 import com.kyant.backdrop.shadow.InnerShadow
 import com.kyant.backdrop.shadow.Shadow
-import common.commons_compose.liquidGlass.utils.DampedDragAnimation
-import common.commons_compose.liquidGlass.utils.TouchHighlight
+import common.libs.compose.liquidGlass.utils.DampedDragAnimation
+import common.libs.compose.liquidGlass.utils.TouchHighlight
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
@@ -68,12 +68,21 @@ fun LiquidBottomTabs(
 	shape: Shape = RoundedCornerShape(50.dp),
 	accentColor: Color = Color(0xFF0088FF),
 	containerColor: Color = Color(0xFFFAFAFA).copy(0.4f),
-	bottomTabHeight: Dp = 64f.dp,
-	selectedTabHeight: Dp = 56f.dp,
-	paddingValues: Dp = 4f.dp,
+	bottomTabHeight: Dp = 64.dp,
+	selectedTabHeight: Dp = 56.dp,
+	//paddingValues khoảng padding start
+	paddingValues: Dp = 4.dp,
+	//tabPadding này phải bằng 2 lần paddingValues
+	tabPadding: Dp = 8.dp,
+	tabSelected: Color? = null,
+	visibilityThreshold: Float = 0.001f,
+	scaleInit: Float = 1f,
+	scalePressed: Float = 1.5f,
 	content: @Composable RowScope.() -> Unit
 ) {
 	val isLightTheme = !isSystemInDarkTheme()
+	val backgroundTabSelected =
+		tabSelected ?: if (isLightTheme) Color.Black.copy(0.1f) else Color.White.copy(0.1f)
 //	val accentColor =
 //		if (isLightTheme) Color(0xFF0088FF)
 //		else Color(0xFF0091FF)
@@ -89,7 +98,7 @@ fun LiquidBottomTabs(
 	) {
 		val density = LocalDensity.current
 		val tabWidth = with(density) {
-			(constraints.maxWidth.toFloat() - 8f.dp.toPx()) / tabsCount
+			(constraints.maxWidth.toFloat() - tabPadding.toPx()) / tabsCount
 		}
 
 		val offsetAnimation = remember { Animatable(0f) }
@@ -112,9 +121,9 @@ fun LiquidBottomTabs(
 				animationScope = animationScope,
 				initialValue = selectedTabIndex().toFloat(),
 				valueRange = 0f..(tabsCount - 1).toFloat(),
-				visibilityThreshold = 0.001f,
-				initialScale = 1f,
-				pressedScale = 78f / 56f,
+				visibilityThreshold = visibilityThreshold,
+				initialScale = scaleInit,
+				pressedScale = scalePressed,
 				onDragStarted = {},
 				onDragStopped = {
 					val targetIndex = targetValue.fastRoundToInt().fastCoerceIn(0, tabsCount - 1)
@@ -156,7 +165,7 @@ fun LiquidBottomTabs(
 		val interactiveHighlight = remember(animationScope) {
 			TouchHighlight(
 				animationScope = animationScope,
-				position = { size, offset ->
+				position = { size, _ ->
 					Offset(
 						if (isLtr) (dampedDragAnimation.value + 0.5f) * tabWidth + panelOffset
 						else size.width - (dampedDragAnimation.value + 0.5f) * tabWidth + panelOffset,
@@ -168,9 +177,7 @@ fun LiquidBottomTabs(
 
 		Row(
 			Modifier
-				.graphicsLayer {
-					translationX = panelOffset
-				}
+				.graphicsLayer { translationX = panelOffset }
 				.drawBackdrop(
 					backdrop = backdrop,
 					shape = { shape },
@@ -281,11 +288,7 @@ fun LiquidBottomTabs(
 					},
 					onDrawSurface = {
 						val progress = dampedDragAnimation.pressProgress
-						drawRect(
-							if (isLightTheme) Color.Black.copy(0.1f)
-							else Color.White.copy(0.1f),
-							alpha = 1f - progress
-						)
+						drawRect(backgroundTabSelected, alpha = 1f - progress)
 						drawRect(Color.Black.copy(alpha = 0.03f * progress))
 					}
 				)

@@ -1,6 +1,5 @@
-package common.commons_compose.liquidGlass.components
+package common.libs.compose.liquidGlass.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastCoerceIn
@@ -41,7 +42,7 @@ import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.highlight.Highlight
 import com.kyant.backdrop.shadow.InnerShadow
 import com.kyant.backdrop.shadow.Shadow
-import common.commons_compose.liquidGlass.utils.DampedDragAnimation
+import common.libs.compose.liquidGlass.utils.DampedDragAnimation
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -49,19 +50,35 @@ fun LiquidToggle(
 	selected: () -> Boolean,
 	onSelect: (Boolean) -> Unit,
 	backdrop: Backdrop,
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	paddingTrack: Dp = 2.dp,
+	accentColor: Color = Color(0xFF34C759),
+	trackColor: Color = Color(0xFF787878).copy(0.36f),
+	thumbColor: Color = Color.White,
+	thumbColorShadow: Color = Color.Black,
+	shapeTrack: Shape = RoundedCornerShape(50.dp),
+	shapeThumb: Shape = RoundedCornerShape(50.dp),
+	trackHeigh: Dp = 28.dp,
+	trackWidth: Dp = 64.dp,
+	thumbHeight: Dp = 24.dp,
+	thumbWidth: Dp = 40.dp,
+	//dragDistance là quãng đường di chuyển của thumb = trackWidth - 2 * paddingTrack - thumbWidth
+	dragDistance: Dp = 20.dp,
+	visibilityThreshold: Float = 0.01f,
+	scaleInit: Float = 1f,
+	scalePressed: Float = 1.5f
 ) {
-	val isLightTheme = !isSystemInDarkTheme()
-	val accentColor =
-		if (isLightTheme) Color(0xFF34C759)
-		else Color(0xFF30D158)
-	val trackColor =
-		if (isLightTheme) Color(0xFF787878).copy(0.2f)
-		else Color(0xFF787880).copy(0.36f)
+//	val isLightTheme = !isSystemInDarkTheme()
+//	val accentColor =
+//		if (isLightTheme) Color(0xFF34C759)
+//		else Color(0xFF30D158)
+//	val trackColor =
+//		if (isLightTheme) Color(0xFF787878).copy(0.2f)
+//		else Color(0xFF787880).copy(0.36f)
 
 	val density = LocalDensity.current
 	val isLtr = LocalLayoutDirection.current == LayoutDirection.Ltr
-	val dragWidth = with(density) { 20f.dp.toPx() }
+	val dragWidth = with(density) { dragDistance.toPx() }
 	val animationScope = rememberCoroutineScope()
 	var didDrag by remember { mutableStateOf(false) }
 	var fraction by remember { mutableFloatStateOf(if (selected()) 1f else 0f) }
@@ -70,9 +87,9 @@ fun LiquidToggle(
 			animationScope = animationScope,
 			initialValue = fraction,
 			valueRange = 0f..1f,
-			visibilityThreshold = 0.001f,
-			initialScale = 1f,
-			pressedScale = 1.5f,
+			visibilityThreshold = visibilityThreshold,
+			initialScale = scaleInit,
+			pressedScale = scalePressed,
 			onDragStarted = {},
 			onDragStopped = {
 				if (didDrag) {
@@ -118,22 +135,24 @@ fun LiquidToggle(
 		modifier,
 		contentAlignment = Alignment.CenterStart
 	) {
+		//Track
 		Box(
 			Modifier
 				.layerBackdrop(trackBackdrop)
-				.clip(RoundedCornerShape(50.dp))
+				.clip(shapeTrack)
 				.drawBehind {
 					val fraction = dampedDragAnimation.value
 					drawRect(lerp(trackColor, accentColor, fraction))
 				}
-				.size(64f.dp, 28f.dp)
+				.size(trackWidth, trackHeigh)
 		)
 
+		//Thumb
 		Box(
 			Modifier
 				.graphicsLayer {
 					val fraction = dampedDragAnimation.value
-					val padding = 2f.dp.toPx()
+					val padding = paddingTrack.toPx()
 					translationX =
 						if (isLtr) lerp(padding, padding + dragWidth, fraction)
 						else lerp(-padding, -(padding + dragWidth), fraction)
@@ -154,7 +173,7 @@ fun LiquidToggle(
 							}
 						}
 					),
-					shape = { RoundedCornerShape(50.dp) },
+					shape = { shapeThumb },
 					effects = {
 						val progress = dampedDragAnimation.pressProgress
 						blur(8f.dp.toPx() * (1f - progress))
@@ -175,7 +194,7 @@ fun LiquidToggle(
 					shadow = {
 						Shadow(
 							radius = 4f.dp,
-							color = Color.Black.copy(alpha = 0.05f)
+							color = thumbColorShadow.copy(alpha = 0.05f)
 						)
 					},
 					innerShadow = {
@@ -194,10 +213,10 @@ fun LiquidToggle(
 					},
 					onDrawSurface = {
 						val progress = dampedDragAnimation.pressProgress
-						drawRect(Color.White.copy(alpha = 1f - progress))
+						drawRect(thumbColor.copy(alpha = 1f - progress))
 					}
 				)
-				.size(40f.dp, 24f.dp)
+				.size(thumbWidth, thumbHeight)
 		)
 	}
 }

@@ -39,13 +39,13 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 				}
 			}
 		},
-		Screen.Home
+		Screen.LiquidGlass
 	)
 	Column(
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
 		NavDisplay(
-			modifier = Modifier.padding(innerPadding),
+//			modifier = Modifier.padding(innerPadding),
 			backStack = backStack,
 			entryDecorators = listOf(
 				rememberSaveableStateHolderNavEntryDecorator(),
@@ -56,6 +56,7 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 					is Screen.Home -> {
 						NavEntry(key) {
 							HomeScreen(
+								modifier = Modifier.padding(innerPadding),
 								openDialog = { backStack.add(Screen.Dialog) },
 								openCropImage = { backStack.add(Screen.CropImage) },
 								openToast = { backStack.add(Screen.Toast) },
@@ -82,8 +83,9 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 					is Screen.LiquidGlass -> {
 						NavEntry(key) {
 							LiquidView(
-								Modifier.fillMaxSize(),
-								this@NavigationType2
+								modifier = Modifier.fillMaxSize(),
+								innerPadding = innerPadding,
+								context = this@NavigationType2
 							)
 						}
 					}

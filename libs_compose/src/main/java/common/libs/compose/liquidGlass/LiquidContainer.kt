@@ -1,4 +1,4 @@
-package common.commons_compose.liquidGlass
+package common.libs.compose.liquidGlass
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -13,7 +13,7 @@ import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 
 @Composable
-fun LiquidViewScaffold(
+fun LiquidContainer(
 	modifier: Modifier = Modifier,
 	background: Int? = null,
 	content: @Composable BoxScope.(backdrop: LayerBackdrop) -> Unit

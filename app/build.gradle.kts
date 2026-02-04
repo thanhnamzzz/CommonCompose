@@ -65,10 +65,6 @@ dependencies {
 	//Crop Image
 	implementation("io.github.mr0xf00:easycrop:0.1.1")
 
-	//LiquidGlass
-	implementation(libs.backdrop)
-//	implementation(libs.capsule)
-
 	//Color picker
 	implementation("com.github.skydoves:colorpicker-compose:1.1.3")
 }

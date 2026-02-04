@@ -47,8 +47,9 @@ fun Context.NavigationType1(innerPadding: PaddingValues) {
 				entry<Screen.CropImage> { ContentCropImage(Modifier.fillMaxSize()) }
 				entry<Screen.LiquidGlass> {
 					LiquidView(
-						Modifier.fillMaxSize(),
-						this@NavigationType1
+						modifier = Modifier.fillMaxSize(),
+						innerPadding = innerPadding,
+						context = this@NavigationType1
 					)
 				}
 				entry<Screen.ColorPicker> { ColorPicker() }

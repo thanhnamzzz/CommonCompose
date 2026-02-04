@@ -1,4 +1,4 @@
-package common.commons_compose.liquidGlass.components
+package common.libs.compose.liquidGlass.components
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
@@ -15,8 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastCoerceAtMost
 import androidx.compose.ui.util.lerp
@@ -25,7 +27,7 @@ import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
 import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.effects.vibrancy
-import common.commons_compose.liquidGlass.utils.TouchHighlight
+import common.libs.compose.liquidGlass.utils.TouchHighlight
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -40,6 +42,10 @@ fun LiquidButton(
 	isInteractive: Boolean = true,
 	tint: Color = Color.Unspecified,
 	surfaceColor: Color = Color.Unspecified,
+	shape: Shape = RoundedCornerShape(10.dp),
+	buttonHeight: Dp = 48.dp,
+	paddingHorizontal: Dp = 16.dp,
+	paddingVertical: Dp = 0.dp,
 	content: @Composable RowScope.() -> Unit
 ) {
 	val animationScope = rememberCoroutineScope()
@@ -53,7 +59,7 @@ fun LiquidButton(
 			.drawBackdrop(
 				backdrop = backdrop,
 //                shape = { ContinuousCapsule /*được lấy ở thư viện https://github.com/Kyant0/Capsule*/ },
-				shape = { RoundedCornerShape(10.dp) },
+				shape = { shape },
 				effects = {
 					vibrancy()
 					blur(2f.dp.toPx())
@@ -112,8 +118,8 @@ fun LiquidButton(
 					Modifier
 				}
 			)
-			.height(48f.dp)
-			.padding(horizontal = 16f.dp),
+			.height(buttonHeight)
+			.padding(horizontal = paddingHorizontal, vertical = paddingVertical),
 		horizontalArrangement = Arrangement.spacedBy(8f.dp, Alignment.CenterHorizontally),
 		verticalAlignment = Alignment.CenterVertically,
 		content = content
