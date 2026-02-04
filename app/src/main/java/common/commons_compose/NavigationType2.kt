@@ -39,7 +39,7 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 				}
 			}
 		},
-		Screen.LiquidGlass
+		Screen.Home
 	)
 	Column(
 		horizontalAlignment = Alignment.CenterHorizontally

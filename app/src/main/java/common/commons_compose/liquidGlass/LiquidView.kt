@@ -2,11 +2,14 @@ package common.commons_compose.liquidGlass
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -27,14 +31,28 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.rememberCombinedBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
+import com.kyant.backdrop.drawBackdrop
+import com.kyant.backdrop.effects.blur
+import com.kyant.backdrop.effects.colorControls
+import com.kyant.backdrop.effects.lens
+import com.kyant.backdrop.effects.vibrancy
+import com.kyant.backdrop.highlight.Highlight
+import common.commons_compose.LoremIpsum
 import common.commons_compose.R
 import common.libs.compose.extensions.contrastingColor
 import common.libs.compose.liquidGlass.LiquidContainer
@@ -69,6 +87,7 @@ fun LiquidView(
 		else Color(0xFF121212)
 
 	var value by rememberSaveable { mutableFloatStateOf(50f) }
+	var showDialog by remember { mutableStateOf(false) }
 
 	LiquidContainer(
 		modifier = modifier.fillMaxSize(),
@@ -115,10 +134,10 @@ fun LiquidView(
 							.height(10.dp)
 					)
 					LiquidButton(
-						onClick = { showToast(scope, cToastState, context, "3") },
+						onClick = { showDialog = true },
 						backdrop = liquidDrop,
 						tint = Color(0xFF0088FF)
-					) { Text("Liquid Button 3") }
+					) { Text("Show Dialog") }
 					Spacer(
 						Modifier
 							.fillMaxWidth()
@@ -228,6 +247,13 @@ fun LiquidView(
 					.padding(horizontal = 35.dp, vertical = 50.dp)
 			)
 		}
+
+		if (showDialog) {
+			ShowDialogSample(
+				backdrop = liquidDrop,
+				onDismiss = { showDialog = false }
+			)
+		}
 	}
 }
 
@@ -330,5 +356,132 @@ private fun showToast(
 			type = CToastType.SUCCESS,
 			duration = duration
 		)
+	}
+}
+
+@Composable
+fun ShowDialogSample(
+	backdrop: Backdrop,
+	onDismiss: () -> Unit
+) {
+	val isLightTheme = !isSystemInDarkTheme()
+	val contentColor = if (isLightTheme) Color.Black else Color.White
+	val accentColor =
+		if (isLightTheme) Color(0xFF0088FF)
+		else Color(0xFF0091FF)
+	val containerColor =
+		if (isLightTheme) Color(0xFFFFFFFF).copy(0.05f)
+		else Color(0xFF121212).copy(0.4f)
+	Dialog(
+		onDismissRequest = onDismiss,
+		properties = DialogProperties(
+			dismissOnClickOutside = true,
+			dismissOnBackPress = true
+		)
+	) {
+		Column(
+			Modifier
+//				.padding(40f.dp)
+				.drawBackdrop(
+					backdrop = rememberCombinedBackdrop(backdrop, rememberLayerBackdrop()),
+					shape = { RoundedCornerShape(40.dp) },
+					effects = {
+						vibrancy()
+						colorControls(
+							brightness = if (isLightTheme) 0.05f else 0f,
+							saturation = 1.5f
+						)
+//						blur(if (isLightTheme) 16f.dp.toPx() else 8f.dp.toPx())
+						blur(8f.dp.toPx())
+						lens(
+							refractionHeight = 55f.dp.toPx(),
+							refractionAmount = 85f.dp.toPx(),
+							depthEffect = true
+						)
+					},
+					highlight = { Highlight.Plain },
+					onDrawSurface = { drawRect(containerColor) }
+				)
+				.fillMaxWidth()
+		) {
+			BasicText(
+				"Dialog Title",
+				Modifier
+					.padding(28f.dp, 24f.dp, 28f.dp, 12f.dp)
+					.fillMaxWidth(),
+				style = TextStyle(contentColor, 24f.sp, FontWeight.Medium)
+			)
+
+			BasicText(
+				LoremIpsum,
+				Modifier
+					.then(
+						if (isLightTheme) {
+							// plus darker
+							Modifier
+						} else {
+							// plus lighter
+							Modifier.graphicsLayer(blendMode = BlendMode.Plus)
+						}
+					)
+					.padding(24f.dp, 12f.dp, 24f.dp, 12f.dp)
+					.fillMaxWidth(),
+				style = TextStyle(contentColor.copy(0.68f), 15f.sp),
+				maxLines = 5
+			)
+
+			Row(
+				Modifier
+					.padding(24f.dp, 12f.dp, 24f.dp, 24f.dp)
+					.fillMaxWidth(),
+				horizontalArrangement = Arrangement.spacedBy(16f.dp),
+				verticalAlignment = Alignment.CenterVertically
+			) {
+				Row(
+					Modifier
+						.clip(RoundedCornerShape(30.dp))
+						.background(containerColor.copy(0.2f))
+						.clickable {
+							onDismiss()
+						}
+						.height(48f.dp)
+						.weight(1f)
+						.padding(horizontal = 16f.dp)
+						.fillMaxWidth(),
+					horizontalArrangement = Arrangement.spacedBy(
+						4f.dp,
+						Alignment.CenterHorizontally
+					),
+					verticalAlignment = Alignment.CenterVertically
+				) {
+					BasicText(
+						"Cancel",
+						style = TextStyle(contentColor, 16f.sp)
+					)
+				}
+				Row(
+					Modifier
+						.clip(RoundedCornerShape(30.dp))
+						.background(accentColor)
+						.clickable {
+							onDismiss()
+						}
+						.height(48f.dp)
+						.weight(1f)
+						.padding(horizontal = 16f.dp)
+						.fillMaxWidth(),
+					horizontalArrangement = Arrangement.spacedBy(
+						4f.dp,
+						Alignment.CenterHorizontally
+					),
+					verticalAlignment = Alignment.CenterVertically
+				) {
+					BasicText(
+						"Okay",
+						style = TextStyle(Color.White, 16f.sp)
+					)
+				}
+			}
+		}
 	}
 }
