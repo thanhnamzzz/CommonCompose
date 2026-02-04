@@ -158,13 +158,17 @@ fun LiquidView(
                         selected = { selected },
                         onSelect = { selected = it },
                         backdrop = liquidDrop,
-//						accentColor = Color(0xFFFFFFFF),
-                        thumbColor = Color(0xFFFFFFFF),
-//						thumbColorShadow = Color(0xFFF4511E).contrastingColor(),
-//						paddingTrack = 5.dp,
-                        thumbWidth = 30.dp,
-                        dragDistance = 30.dp,
-//						scalePressed = 2f
+                        thumbColor = Color(0xFF000540),
+                        accentColor = Color(0xFFFCC443),
+                        trackColor = Color(0xFFCBCDD3).copy(alpha = 0.7f),
+                        paddingTrack = 3.dp,
+                        trackHeigh = 28.dp,
+                        trackWidth = 56.dp,
+                        thumbHeight = 22.dp,
+                        thumbWidth = 25.dp,
+                        //dragDistance là quãng đường di chuyển của thumb = trackWidth - 2 * paddingTrack - thumbWidth
+                        dragDistance = 25.dp,
+                        scalePressed = 1.8f
                     )
                     Spacer(
                         Modifier
