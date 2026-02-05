@@ -152,7 +152,11 @@ fun LiquidView(
                         selected = { selected },
                         onSelect = { selected = it },
                         backdrop = liquidDrop,
-                        onClickToggle = { selected = !selected }
+                        onClickToggle = { selected = !selected },
+	                    trackWidth = 100.dp,
+	                    thumbWidth = 35.dp,
+	                    dragDistance = 61.dp,
+	                    scalePressed = 1.8f,
                     )
                     Spacer(Modifier.size(5.dp))
                     LiquidToggle(
@@ -241,15 +245,15 @@ fun LiquidView(
                         onTabSelected = {
                             showToast(scope, cToastState, context, "Selected Tab $it", 800)
                         },
-                        shape = RoundedCornerShape(40.dp),
+                        shape = RoundedCornerShape(15.dp),
                         addItem = true
                     )
                 }
             }
 
-            if (selected) {
-                showToast(scope, cToastState, context, "Selected")
-            }
+//            if (selected) {
+//                showToast(scope, cToastState, context, "Selected")
+//            }
 
             CToastHost(
                 hostState = cToastState,

@@ -1,6 +1,7 @@
 package common.libs.compose.liquidGlass.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -135,7 +136,12 @@ fun LiquidToggle(
 
 	Box(
 		modifier = modifier
-            .clickable(enabled = true, onClick = onClickToggle),
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null, // This removes the ripple effect
+                enabled = true,
+                onClick = onClickToggle
+            ),
 		contentAlignment = Alignment.CenterStart
 	) {
 		//Track
