@@ -1,10 +1,12 @@
 package common.libs.compose.functions
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.util.Log
 import androidx.core.net.toUri
 
@@ -86,4 +88,23 @@ fun Context.isConnectedInternet(): Boolean {
 	return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
 			networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
 			networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+}
+
+fun Activity.feedbackOnEmail(
+	mailDevelop: String = "store@gambi.global",
+	subject: String = "Feedback for Team",
+	body: String = "Dear Development Team,\n",
+) {
+	val intent = Intent(Intent.ACTION_SENDTO).apply {
+//		putExtra(Intent.EXTRA_SUBJECT, subject)
+//		putExtra(Intent.EXTRA_TEXT, body)
+//		data = "mailto:${MainApp.EMAIL_DEVELOPER}".toUri()
+		data =
+			"mailto:${mailDevelop}?subject=${Uri.encode(subject)}&body=${Uri.encode(body)}".toUri()
+	}
+	intent.resolveActivity(packageManager)?.let {
+		startActivity(intent)
+	} ?: run {
+		openMarket()
+	}
 }
