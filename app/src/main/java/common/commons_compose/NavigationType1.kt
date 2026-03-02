@@ -37,7 +37,8 @@ fun Context.NavigationType1(innerPadding: PaddingValues) {
 						openLiquidGlass = { backStack.add(Screen.LiquidGlass) },
 						openColorPicker = { backStack.add(Screen.ColorPicker) },
 						openImagePicker = { backStack.add(Screen.ImagePicker) },
-						openAnimationView = { backStack.add(Screen.AnimationView) }
+						openAnimationView = { backStack.add(Screen.AnimationView) },
+                        openCountDownTimer = { backStack.add(Screen.CountDownTimer) },
 					)
 				}
 				entry<Screen.Dialog> { DialogScreen() }
