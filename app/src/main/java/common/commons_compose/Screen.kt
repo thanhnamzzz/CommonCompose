@@ -23,4 +23,6 @@ sealed interface Screen : NavKey {
 	data object ImagePicker : Screen, NavKey
 	@Serializable
 	data object AnimationView : Screen, NavKey
+	@Serializable
+	data object CountDownTimer : Screen, NavKey
 }

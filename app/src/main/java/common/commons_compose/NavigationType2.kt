@@ -37,6 +37,7 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 					subclass(Screen.ColorPicker::class, Screen.ColorPicker.serializer())
 					subclass(Screen.ImagePicker::class, Screen.ImagePicker.serializer())
 					subclass(Screen.AnimationView::class, Screen.AnimationView.serializer())
+					subclass(Screen.CountDownTimer::class, Screen.CountDownTimer.serializer())
 				}
 			}
 		},
@@ -64,7 +65,8 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 								openLiquidGlass = { backStack.add(Screen.LiquidGlass) },
 								openColorPicker = { backStack.add(Screen.ColorPicker) },
 								openImagePicker = { backStack.add(Screen.ImagePicker) },
-								openAnimationView = { backStack.add(Screen.AnimationView) }
+								openAnimationView = { backStack.add(Screen.AnimationView) },
+                                openCountDownTimer = { backStack.add(Screen.CountDownTimer) },
 							)
 						}
 					}
@@ -108,6 +110,10 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 
                     is Screen.LazyColumnLiquid -> {
                         NavEntry(key) { LiquidLazyColumn() }
+                    }
+
+                    is Screen.CountDownTimer -> {
+                        NavEntry(key) { TestCountDownTimerCompose(modifier = Modifier.padding(innerPadding)) }
                     }
 
 					else -> error("Unknown key: $key")
