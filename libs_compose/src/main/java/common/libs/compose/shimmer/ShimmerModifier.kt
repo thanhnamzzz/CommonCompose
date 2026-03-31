@@ -1,3 +1,4 @@
+/** Clone from com.valentinilk.shimmer:compose-shimmer */
 package common.libs.compose.shimmer
 
 import androidx.compose.runtime.Composable
