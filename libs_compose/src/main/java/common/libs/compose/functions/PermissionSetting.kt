@@ -18,6 +18,14 @@ fun Context.openAppSettings(resultLauncher: ActivityResultLauncher<Intent>) {
 	resultLauncher.launch(intent)
 }
 
+fun Context.openAppSettings() {
+	val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+		data = Uri.fromParts("package", packageName, null)
+		addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+	}
+	startActivity(intent)
+}
+
 fun Context.setAllFile(resultLauncher: ActivityResultLauncher<Intent>) {
 	if (isR30Plus()) {
 		val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
