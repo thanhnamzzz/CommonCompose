@@ -67,4 +67,10 @@ dependencies {
 
 	//Color picker
 	implementation("com.github.skydoves:colorpicker-compose:1.1.3")
+	androidTestImplementation(platform(libs.androidx.compose.bom))
+	androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+	debugImplementation(libs.androidx.compose.ui.tooling)
+	debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+//	implementation(libs.kotlinx.serialization.core)
 }

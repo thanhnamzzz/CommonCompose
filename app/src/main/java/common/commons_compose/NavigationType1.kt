@@ -17,7 +17,10 @@ import common.commons_compose.colorPicker.ImagePicker
 import common.commons_compose.liquidGlass.LiquidView
 
 @Composable
-fun Context.NavigationType1(innerPadding: PaddingValues) {
+fun Context.NavigationType1(
+	innerPadding: PaddingValues,
+	openBottomNavigationBar: () -> Unit
+) {
 	val backStack = remember { mutableStateListOf<Screen>(Screen.Home) }
 	Column(
 		horizontalAlignment = Alignment.CenterHorizontally
@@ -38,7 +41,8 @@ fun Context.NavigationType1(innerPadding: PaddingValues) {
 						openColorPicker = { backStack.add(Screen.ColorPicker) },
 						openImagePicker = { backStack.add(Screen.ImagePicker) },
 						openAnimationView = { backStack.add(Screen.AnimationView) },
-                        openCountDownTimer = { backStack.add(Screen.CountDownTimer) },
+						openCountDownTimer = { backStack.add(Screen.CountDownTimer) },
+						openBottomNavigationBar = openBottomNavigationBar
 					)
 				}
 				entry<Screen.Dialog> { DialogScreen() }
@@ -51,9 +55,9 @@ fun Context.NavigationType1(innerPadding: PaddingValues) {
 						modifier = Modifier.fillMaxSize(),
 						innerPadding = innerPadding,
 						context = this@NavigationType1,
-                        openLazyColumn = {
-                            backStack.add(Screen.LazyColumnLiquid)
-                        }
+						openLazyColumn = {
+							backStack.add(Screen.LazyColumnLiquid)
+						}
 					)
 				}
 				entry<Screen.ColorPicker> { ColorPicker() }

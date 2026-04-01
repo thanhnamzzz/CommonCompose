@@ -24,7 +24,10 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
 @Composable
-fun Context.NavigationType2(innerPadding: PaddingValues) {
+fun Context.NavigationType2(
+	innerPadding: PaddingValues,
+	openBottomNavigationBar: () -> Unit
+) {
 	val backStack = rememberNavBackStack(
 		configuration = SavedStateConfiguration {
 			serializersModule = SerializersModule {
@@ -66,7 +69,8 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 								openColorPicker = { backStack.add(Screen.ColorPicker) },
 								openImagePicker = { backStack.add(Screen.ImagePicker) },
 								openAnimationView = { backStack.add(Screen.AnimationView) },
-                                openCountDownTimer = { backStack.add(Screen.CountDownTimer) },
+								openCountDownTimer = { backStack.add(Screen.CountDownTimer) },
+								openBottomNavigationBar = openBottomNavigationBar
 							)
 						}
 					}
@@ -76,11 +80,24 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 					}
 
 					is Screen.Toast -> {
-						NavEntry(key) { ToastScreen(Modifier.fillMaxSize().padding(innerPadding), this@NavigationType2) }
+						NavEntry(key) {
+							ToastScreen(
+								Modifier
+									.fillMaxSize()
+									.padding(innerPadding),
+								this@NavigationType2
+							)
+						}
 					}
 
 					is Screen.CropImage -> {
-						NavEntry(key) { ContentCropImage(Modifier.fillMaxSize().padding(innerPadding)) }
+						NavEntry(key) {
+							ContentCropImage(
+								Modifier
+									.fillMaxSize()
+									.padding(innerPadding)
+							)
+						}
 					}
 
 					is Screen.LiquidGlass -> {
@@ -89,9 +106,9 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 								modifier = Modifier.fillMaxSize(),
 								innerPadding = innerPadding,
 								context = this@NavigationType2,
-                                openLazyColumn = {
-                                    backStack.add(Screen.LazyColumnLiquid)
-                                }
+								openLazyColumn = {
+									backStack.add(Screen.LazyColumnLiquid)
+								}
 							)
 						}
 					}
@@ -108,13 +125,19 @@ fun Context.NavigationType2(innerPadding: PaddingValues) {
 						NavEntry(key) { AnimationView(modifier = Modifier.padding(innerPadding)) }
 					}
 
-                    is Screen.LazyColumnLiquid -> {
-                        NavEntry(key) { LiquidLazyColumn() }
-                    }
+					is Screen.LazyColumnLiquid -> {
+						NavEntry(key) { LiquidLazyColumn() }
+					}
 
-                    is Screen.CountDownTimer -> {
-                        NavEntry(key) { TestCountDownTimerCompose(modifier = Modifier.padding(innerPadding)) }
-                    }
+					is Screen.CountDownTimer -> {
+						NavEntry(key) {
+							TestCountDownTimerCompose(
+								modifier = Modifier.padding(
+									innerPadding
+								)
+							)
+						}
+					}
 
 					else -> error("Unknown key: $key")
 				}
