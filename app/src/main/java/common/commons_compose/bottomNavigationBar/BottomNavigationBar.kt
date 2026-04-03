@@ -17,15 +17,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import common.commons_compose.bottomNavigationBar.ui.theme.CommonComposeTheme
+import common.libs.compose.stackManager.rememberMultiStackNavManager
 import kotlinx.serialization.Serializable
 
 interface BottomNavItem {
@@ -34,7 +36,7 @@ interface BottomNavItem {
 }
 
 @Serializable
-data object Home : NavKey, BottomNavItem {
+data object Home2 : NavKey, BottomNavItem {
 	override val icon: ImageVector = Icons.Filled.Home
 	override val title: String = "Home"
 }
@@ -63,17 +65,21 @@ class BottomNavigationBar : ComponentActivity() {
 		enableEdgeToEdge()
 		setContent {
 			CommonComposeTheme {
-				val bottomNavItems = listOf(Home, NoteList)
-				val topLevelBackStack = remember { TopLevelBackStack<NavKey>(Home) }
+				val bottomNavItems = listOf(Home2, NoteList)
+//				val topLevelBackStack = remember { TopLevelBackStack<NavKey>(Home) }
+				val navManager = rememberMultiStackNavManager<NavKey>(Home2)
+//				val navManager = remember { MultiStackNavManager<NavKey>(Home2) }
 				Scaffold(
 					bottomBar = {
 						NavigationBar {
 							bottomNavItems.forEach { item ->
-								val selected = topLevelBackStack.topLevelKey == item
+//								val selected = topLevelBackStack.topLevelKey == item
+								val selected = navManager.currentTopLevelKey == item
 								NavigationBarItem(
 									selected = selected,
 									onClick = {
-										topLevelBackStack.switchTopLevel(item)
+										navManager.switchStack(item)
+//										topLevelBackStack.switchTopLevel(item)
 									},
 									icon = {
 										Icon(
@@ -95,54 +101,67 @@ class BottomNavigationBar : ComponentActivity() {
 						.fillMaxSize()
 						.padding(innerPadding)
 					NavDisplay(
-						backStack = topLevelBackStack.backStack,
-						onBack = { topLevelBackStack.removeLast() },
+//						backStack = topLevelBackStack.backStack,
+//						onBack = { topLevelBackStack.removeLast() },
+						backStack = navManager.backStack,
+						onBack = { navManager.pop() },
+						entryDecorators = listOf(
+							rememberSaveableStateHolderNavEntryDecorator(),
+							rememberViewModelStoreNavEntryDecorator()
+						),
 						entryProvider = entryProvider {
-							entry<Home> {
+							entry<Home2> {
 								HomeScreen(
-									onDetailClick = { topLevelBackStack.add(HomeDetail) },
+//									onDetailClick = { topLevelBackStack.add(HomeDetail) },
+									onDetailClick = { navManager.push(HomeDetail) },
 									modifier = screenModifier
 								)
 							}
 							entry<HomeDetail> {
 								HomeDetailScreen(
-									onBackClick = { topLevelBackStack.removeLast() },
+//									onBackClick = { topLevelBackStack.removeLast() },
+									onBackClick = { navManager.pop() },
 									modifier = screenModifier
 								)
 							}
 							entry<NoteList> {
 								NoteListScreen(
-									onNoteClick = { id -> topLevelBackStack.add(NoteDetail(id)) },
-									onCreateClick = { topLevelBackStack.add(NoteCreate) },
+//									onNoteClick = { id -> topLevelBackStack.add(NoteDetail(id)) },
+//									onCreateClick = { topLevelBackStack.add(NoteCreate) },
+									onNoteClick = { id -> navManager.push(NoteDetail(id)) },
+									onCreateClick = { navManager.push(NoteCreate) },
 									modifier = screenModifier
 								)
 							}
 							entry<NoteDetail> { args ->
 								NoteDetailScreen(
 									noteId = args.id,
-									onBackClick = { topLevelBackStack.removeLast() },
-									onEditClick = { topLevelBackStack.add(NoteEdit(args.id)) },
+//									onBackClick = { topLevelBackStack.removeLast() },
+//									onEditClick = { topLevelBackStack.add(NoteEdit(args.id)) },
+									onBackClick = { navManager.pop() },
+									onEditClick = { navManager.push(NoteEdit(args.id)) },
 									modifier = screenModifier
 								)
 							}
 							entry<NoteEdit> { args ->
 								NoteEditScreen(
 									noteId = args.id,
-									onBackClick = { topLevelBackStack.removeLast() },
-									onSaveClick = { topLevelBackStack.removeLast() },
+//									onBackClick = { topLevelBackStack.removeLast() },
+//									onSaveClick = { topLevelBackStack.removeLast() },
+									onBackClick = { navManager.pop() },
+									onSaveClick = { navManager.pop() },
 									modifier = screenModifier
 								)
 							}
 							entry<NoteCreate> {
 								NoteCreateScreen(
-									onBackClick = { topLevelBackStack.removeLast() },
+									onBackClick = { navManager.pop() },
 									onNoteCreated = { id ->
-										topLevelBackStack.replaceStack(NoteList, NoteDetail(id))
+										navManager.replaceStack(NoteList, NoteDetail(id))
 									},
 									modifier = screenModifier
 								)
 							}
-
 						}
 					)
 				}

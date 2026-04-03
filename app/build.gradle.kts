@@ -59,7 +59,7 @@ dependencies {
 	implementation(libs.androidx.compose.material.icons.extended)
 	implementation(libs.androidx.navigation3.ui.android)
 	implementation(libs.kotlinx.serialization.json)
-	implementation(libs.lifecycle.viewmodel.navigation3)
+	implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
 	implementation(libs.lottie.compose)
 	//Crop Image
@@ -67,10 +67,9 @@ dependencies {
 
 	//Color picker
 	implementation("com.github.skydoves:colorpicker-compose:1.1.3")
+	implementation(libs.androidx.compose.runtime)
 	androidTestImplementation(platform(libs.androidx.compose.bom))
 	androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 	debugImplementation(libs.androidx.compose.ui.tooling)
 	debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-//	implementation(libs.kotlinx.serialization.core)
 }

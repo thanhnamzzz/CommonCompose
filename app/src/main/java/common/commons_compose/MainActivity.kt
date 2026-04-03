@@ -57,7 +57,11 @@ class MainActivity : ComponentActivity() {
 				window.SetNavigationBarContentColor(Color.Transparent)
 				Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 //					NavigationType1(innerPadding)
-					NavigationType2(
+//					NavigationType2(
+//						innerPadding = innerPadding,
+//						openBottomNavigationBar = { openBottomNavigationBar() }
+//					)
+					NavigationType3(
 						innerPadding = innerPadding,
 						openBottomNavigationBar = { openBottomNavigationBar() }
 					)

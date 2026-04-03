@@ -33,10 +33,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import common.libs.compose.functions.ShowKeyboard
 
 data class Note(
 	val id: Long,
@@ -53,6 +56,9 @@ fun NoteCreateScreen(
 ) {
 	var title by rememberSaveable { mutableStateOf("") }
 	var content by rememberSaveable { mutableStateOf("") }
+	val focusRequester = remember { FocusRequester() }
+
+	ShowKeyboard(focusRequester)
 
 	Column(
 		verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -81,6 +87,7 @@ fun NoteCreateScreen(
 			modifier = Modifier
 				.padding(horizontal = 16.dp)
 				.fillMaxWidth()
+				.focusRequester(focusRequester)
 		)
 
 		OutlinedTextField(
@@ -310,6 +317,12 @@ fun NoteListScreen(
 						Text(
 							text = note.title,
 							style = MaterialTheme.typography.titleMedium
+						)
+						Text(
+							text = note.content.take(100),
+							style = MaterialTheme.typography.bodyMedium,
+							maxLines = 2,
+							overflow = TextOverflow.Ellipsis
 						)
 						Text(
 							text = note.content.take(100),
