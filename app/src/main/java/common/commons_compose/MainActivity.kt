@@ -86,7 +86,8 @@ fun HomeScreen(
 	openImagePicker: () -> Unit,
 	openAnimationView: () -> Unit,
 	openCountDownTimer: () -> Unit,
-	openBottomNavigationBar: () -> Unit
+	openBottomNavigationBar: () -> Unit,
+	openHazeSample: () -> Unit,
 ) {
 	val scrollState = rememberScrollState()
 	CompositionLocalProvider(
@@ -105,6 +106,7 @@ fun HomeScreen(
 			Button(onClick = { openLiquidGlass() }) { Text("Liquid Glass") }
 			Button(onClick = { openColorPicker() }) { Text("Color picker") }
 			Button(onClick = { openImagePicker() }) { Text("Image picker") }
+			Button(onClick = { openHazeSample() }) { Text("Haze Blur Sample") }
 			Button(
 				modifier = Modifier
 					.clip(RoundedCornerShape(40.dp))

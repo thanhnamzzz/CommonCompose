@@ -25,4 +25,6 @@ sealed interface Screen : NavKey {
 	data object AnimationView : Screen, NavKey
 	@Serializable
 	data object CountDownTimer : Screen, NavKey
+	@Serializable
+	data object BlurViewHaze : Screen, NavKey
 }

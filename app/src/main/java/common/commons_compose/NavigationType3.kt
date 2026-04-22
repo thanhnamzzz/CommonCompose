@@ -13,6 +13,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import common.commons_compose.animation.AnimationView
+import common.commons_compose.blurView.HazeSample
 import common.commons_compose.colorPicker.ColorPicker
 import common.commons_compose.colorPicker.ImagePicker
 import common.commons_compose.liquidGlass.LiquidLazyColumn
@@ -53,7 +54,8 @@ fun Context.NavigationType3(
 								openImagePicker = { navManager.push(Screen.ImagePicker) },
 								openAnimationView = { navManager.push(Screen.AnimationView) },
 								openCountDownTimer = { navManager.push(Screen.CountDownTimer) },
-								openBottomNavigationBar = openBottomNavigationBar
+								openBottomNavigationBar = openBottomNavigationBar,
+								openHazeSample = { navManager.push(Screen.BlurViewHaze) }
 							)
 						}
 					}
@@ -120,6 +122,10 @@ fun Context.NavigationType3(
 								)
 							)
 						}
+					}
+
+					is Screen.BlurViewHaze -> {
+						NavEntry(key) { HazeSample() }
 					}
 				}
 			}

@@ -9,8 +9,8 @@ activityCompose = "1.13.0"
 composeBom = "2026.03.01"
 lottieCompose = "6.7.1"
 materialIconsExtended = "1.7.8"
-navigation3UiAndroid = "1.0.1"
-kotlinxSerializationJson = "1.10.0"
+navigation3UiAndroid = "1.1.0"
+kotlinxSerializationJson = "1.11.0"
 runtime = "1.10.6"
 
 [libraries]

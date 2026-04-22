@@ -61,6 +61,7 @@ dependencies {
 	implementation(libs.kotlinx.serialization.json)
 	implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
+	implementation("io.coil-kt.coil3:coil-compose:3.4.0")
 	implementation(libs.lottie.compose)
 	//Crop Image
 	implementation("io.github.mr0xf00:easycrop:0.1.1")
@@ -72,4 +73,8 @@ dependencies {
 	androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 	debugImplementation(libs.androidx.compose.ui.tooling)
 	debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+	//Haze blur background
+	implementation("dev.chrisbanes.haze:haze:1.7.2")
+	implementation("dev.chrisbanes.haze:haze-materials:1.7.2")
 }

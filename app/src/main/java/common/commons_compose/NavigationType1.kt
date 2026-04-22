@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import common.commons_compose.blurView.HazeSample
 import common.commons_compose.colorPicker.ColorPicker
 import common.commons_compose.colorPicker.ImagePicker
 import common.commons_compose.liquidGlass.LiquidView
@@ -42,7 +43,8 @@ fun Context.NavigationType1(
 						openImagePicker = { backStack.add(Screen.ImagePicker) },
 						openAnimationView = { backStack.add(Screen.AnimationView) },
 						openCountDownTimer = { backStack.add(Screen.CountDownTimer) },
-						openBottomNavigationBar = openBottomNavigationBar
+						openBottomNavigationBar = openBottomNavigationBar,
+						openHazeSample = { backStack.add(Screen.BlurViewHaze) }
 					)
 				}
 				entry<Screen.Dialog> { DialogScreen() }
@@ -62,6 +64,7 @@ fun Context.NavigationType1(
 				}
 				entry<Screen.ColorPicker> { ColorPicker() }
 				entry<Screen.ImagePicker> { ImagePicker() }
+				entry<Screen.BlurViewHaze> { HazeSample() }
 			}
 		)
 	}
