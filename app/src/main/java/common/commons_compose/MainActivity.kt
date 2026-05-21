@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -35,11 +36,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import common.commons_compose.bottomNavigationBar.BottomNavigationBar
 import common.commons_compose.ui.theme.CommonComposeTheme
+import common.commons_compose.viewModels.CountDownViewModel
+import common.commons_compose.viewModels.HomeViewModel
 import common.libs.compose.extensions.SetNavigationBarContentColor
 import common.libs.compose.functions.rememberComposeTimer
 import common.libs.compose.shimmer.LocalShimmerTheme
@@ -47,7 +51,9 @@ import common.libs.compose.shimmer.defaultShimmerTheme
 import common.libs.compose.shimmer.shimmer
 import common.libs.compose.shimmer.shimmerOverlay
 import common.libs.compose.shimmer.shimmerSpec
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -88,8 +94,12 @@ fun HomeScreen(
 	openCountDownTimer: () -> Unit,
 	openBottomNavigationBar: () -> Unit,
 	openHazeSample: () -> Unit,
+	viewModel: HomeViewModel = hiltViewModel()
 ) {
 	val scrollState = rememberScrollState()
+	LaunchedEffect(Unit) {
+		viewModel.testFunction()
+	}
 	CompositionLocalProvider(
 		LocalShimmerTheme provides creditCardTheme,
 	) {
@@ -168,8 +178,12 @@ fun HomeScreen(
 
 @Composable
 fun TestCountDownTimerCompose(
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	viewModel: CountDownViewModel = hiltViewModel()
 ) {
+	LaunchedEffect(Unit) {
+		viewModel.testFunction()
+	}
 	val timer = rememberComposeTimer(
 		totalMillis = 10000L,
 		onFinish = {

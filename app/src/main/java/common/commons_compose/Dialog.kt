@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,16 +38,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.airbnb.lottie.RenderMode
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import common.commons_compose.viewModels.DialogViewModel
 import common.libs.compose.extensions.handlerFunction
 
 @Composable
-fun DialogScreen(modifier: Modifier = Modifier) {
+fun DialogScreen(modifier: Modifier = Modifier, viewModel: DialogViewModel = hiltViewModel()) {
+	LaunchedEffect(Unit) {
+		viewModel.testFunction()
+	}
 	var showDialog1 by remember { mutableStateOf(false) }
 	var showDialog2 by remember { mutableStateOf(false) }
 

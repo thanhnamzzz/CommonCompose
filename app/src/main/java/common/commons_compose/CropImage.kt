@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.FileProvider
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.mr0xf00.easycrop.CropError
 import com.mr0xf00.easycrop.CropResult
 import com.mr0xf00.easycrop.CropState
@@ -35,13 +37,20 @@ import com.mr0xf00.easycrop.crop
 import com.mr0xf00.easycrop.rememberImageCropper
 import com.mr0xf00.easycrop.rememberImagePicker
 import com.mr0xf00.easycrop.ui.ImageCropperDialog
+import common.commons_compose.viewModels.CropImageViewModel
 import common.libs.compose.toast.CToastType
 import common.libs.compose.toast.LocalToast
 import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
-fun ContentCropImage(modifier: Modifier = Modifier) {
+fun ContentCropImage(
+	modifier: Modifier = Modifier,
+	viewModel: CropImageViewModel = hiltViewModel()
+) {
+	LaunchedEffect(Unit) {
+		viewModel.testFunction()
+	}
 	var selectedImage by remember { mutableStateOf<ImageBitmap?>(null) }
 	var error by remember { mutableStateOf<CropError?>(null) }
 	val context = LocalContext.current

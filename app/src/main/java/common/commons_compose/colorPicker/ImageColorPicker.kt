@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.github.skydoves.colorpicker.compose.AlphaSlider
 import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.BrightnessSlider
@@ -29,11 +31,16 @@ import com.github.skydoves.colorpicker.compose.ImageColorPicker
 import com.github.skydoves.colorpicker.compose.PaletteContentScale
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import common.commons_compose.R
+import common.commons_compose.viewModels.ImageViewModel
 
 @Composable
 fun ImagePicker(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+	viewModel: ImageViewModel = hiltViewModel()
 ) {
+	LaunchedEffect(Unit) {
+		viewModel.testFunction()
+	}
 	val controller = rememberColorPickerController()
 	var result by remember { mutableStateOf("") }
 

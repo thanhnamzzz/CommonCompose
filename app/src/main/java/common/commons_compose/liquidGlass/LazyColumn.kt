@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,8 +26,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.kyant.backdrop.backdrops.layerBackdrop
 import common.commons_compose.R
+import common.commons_compose.viewModels.LiquidLazyViewModel
 import common.libs.compose.liquidGlass.LiquidContainer
 import common.libs.compose.liquidGlass.components.LiquidButton
 
@@ -34,7 +37,11 @@ import common.libs.compose.liquidGlass.components.LiquidButton
 @Composable
 fun LiquidLazyColumn(
     modifier: Modifier = Modifier,
+    viewModel: LiquidLazyViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.testFunction()
+    }
     LiquidContainer(
         modifier = modifier.fillMaxSize()
     ) { liquidDrop ->

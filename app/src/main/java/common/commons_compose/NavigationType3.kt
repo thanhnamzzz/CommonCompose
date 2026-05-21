@@ -1,6 +1,11 @@
 package common.commons_compose
 
 import android.content.Context
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,6 +45,18 @@ fun Context.NavigationType3(
 				//Cần có androidx.lifecycle:lifecycle-viewmodel-navigation3
 				rememberViewModelStoreNavEntryDecorator()
 			),
+			transitionSpec = {
+				// Hướng điều hướng: Đi tới hoặc Quay lại
+				if (targetState.entries.size > initialState.entries.size) {
+					// Forward animation: Trượt từ phải sang trái kết hợp fade in
+					slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+							slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+				} else {
+					// Backward animation: Trượt từ trái sang phải
+					slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
+							slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
+				}
+			},
 			entryProvider = { key ->
 				when (key) {
 					is Screen.Home -> {

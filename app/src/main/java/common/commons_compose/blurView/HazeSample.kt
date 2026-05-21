@@ -17,14 +17,17 @@ import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import common.commons_compose.R
+import common.commons_compose.viewModels.HazeViewModel
 import dev.chrisbanes.haze.ExperimentalHazeApi
 import dev.chrisbanes.haze.HazeProgressive
 import dev.chrisbanes.haze.hazeEffect
@@ -39,8 +42,12 @@ import dev.chrisbanes.haze.rememberHazeState
 @OptIn(ExperimentalHazeMaterialsApi::class, ExperimentalHazeApi::class)
 @Composable
 fun HazeSample(
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	viewModel: HazeViewModel = hiltViewModel()
 ) {
+	LaunchedEffect(Unit) {
+		viewModel.testFunction()
+	}
 	val hazeState = rememberHazeState()
 	Box(
 		modifier = modifier

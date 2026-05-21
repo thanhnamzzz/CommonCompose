@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.kyant.backdrop.Backdrop
 import com.kyant.backdrop.backdrops.rememberCombinedBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
@@ -54,6 +56,7 @@ import com.kyant.backdrop.effects.vibrancy
 import com.kyant.backdrop.highlight.Highlight
 import common.commons_compose.LoremIpsum
 import common.commons_compose.R
+import common.commons_compose.viewModels.LiquidViewModel
 import common.libs.compose.extensions.contrastingColor
 import common.libs.compose.liquidGlass.LiquidContainer
 import common.libs.compose.liquidGlass.components.LiquidBottomTab
@@ -76,8 +79,12 @@ fun LiquidView(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues,
     context: Context,
+    viewModel: LiquidViewModel = hiltViewModel(),
     openLazyColumn: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.testFunction()
+    }
     val cToastState = remember { CToastState() }
     val scope = rememberCoroutineScope()
     var selected by rememberSaveable { mutableStateOf(false) }

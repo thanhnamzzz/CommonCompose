@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import common.commons_compose.viewModels.ToastViewModel
 import common.libs.compose.toast.CToastType
 import common.libs.compose.toast.LocalToast
 import kotlinx.coroutines.launch
@@ -32,8 +35,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun ToastScreen(
 	modifier: Modifier = Modifier,
-	context: Context
+	context: Context,
+	viewModel: ToastViewModel = hiltViewModel()
 ) {
+	LaunchedEffect(Unit) {
+		viewModel.testFunction()
+	}
 	/** Khai báo */
 //	val cToastState = remember { CToastState() }
 	val scope = rememberCoroutineScope()

@@ -5,6 +5,8 @@ plugins {
 	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.kotlin.compose)
 	alias(libs.plugins.kotlin.serialization)
+	id("com.google.dagger.hilt.android")
+	id("com.google.devtools.ksp")
 }
 
 android {
@@ -77,4 +79,9 @@ dependencies {
 	//Haze blur background
 	implementation("dev.chrisbanes.haze:haze:1.7.2")
 	implementation("dev.chrisbanes.haze:haze-materials:1.7.2")
+
+	//Hilt
+	implementation(libs.hilt.android)
+	ksp(libs.hilt.android.compiler)
+	implementation(libs.androidx.hilt.navigation.compose)
 }

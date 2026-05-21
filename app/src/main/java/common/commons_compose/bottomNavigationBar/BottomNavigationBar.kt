@@ -28,6 +28,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import common.commons_compose.bottomNavigationBar.ui.theme.CommonComposeTheme
 import common.libs.compose.stackManager.rememberMultiStackNavManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
 
 interface BottomNavItem {
@@ -59,6 +60,7 @@ data class NoteDetail(val id: Long) : NavKey
 @Serializable
 data class NoteEdit(val id: Long) : NavKey
 
+@AndroidEntryPoint
 class BottomNavigationBar : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
