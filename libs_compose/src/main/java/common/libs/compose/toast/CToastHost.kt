@@ -52,6 +52,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun CToastHost(
 	modifier: Modifier = Modifier,
+    layoutType: CToastLayout = CToastLayout.Fill,
     hostState: CToastState = LocalToast.current,
     // Customize the animations from the outside for maximum flexibility.
     enter: EnterTransition = fadeIn() + slideInVertically(),
@@ -100,6 +101,7 @@ fun CToastHost(
             toastData?.let { data ->
                 CToastView(
                     data = data,
+                    layoutType = layoutType,
                     // Retrieve the globally provided configuration via CompositionLocal.
                     config = LocalCToastConfig.current
                 )

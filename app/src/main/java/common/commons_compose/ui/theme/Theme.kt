@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import common.libs.compose.toast.CToastConfiguration
 import common.libs.compose.toast.CToastHost
+import common.libs.compose.toast.CToastLayout
 import common.libs.compose.toast.CToastState
 import common.libs.compose.toast.LocalCToastConfig
 import common.libs.compose.toast.LocalToast
@@ -46,6 +47,7 @@ fun CommonComposeTheme(
 	// Dynamic color is available on Android 12+
 	dynamicColor: Boolean = true,
 	toastConfig: CToastConfiguration = CToastConfiguration.Classic,
+	toastLayout: CToastLayout = CToastLayout.Fill,
 	content: @Composable () -> Unit
 ) {
 	val colorScheme = when {
@@ -67,7 +69,7 @@ fun CommonComposeTheme(
 				LocalToast provides CToastState()
 			) {
 				content()
-				CToastHost(modifier = Modifier.systemBarsPadding())
+				CToastHost(modifier = Modifier.systemBarsPadding(), layoutType = toastLayout)
 			}
 		}
 	)

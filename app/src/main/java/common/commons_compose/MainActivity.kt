@@ -15,11 +15,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -51,6 +54,9 @@ import common.libs.compose.shimmer.defaultShimmerTheme
 import common.libs.compose.shimmer.shimmer
 import common.libs.compose.shimmer.shimmerOverlay
 import common.libs.compose.shimmer.shimmerSpec
+import common.libs.compose.toast.CToastFillComponent
+import common.libs.compose.toast.CToastGradientComponent
+import common.libs.compose.toast.CToastOutlinedComponent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -253,3 +259,56 @@ private val creditCardTheme = defaultShimmerTheme.copy(
 	shaderColorStops = null,
 	shimmerWidth = 50.dp,
 )
+
+@Preview(showBackground = true, backgroundColor = 0xFFF0F0F0)
+@Composable
+fun ToastFillStylesPreview() {
+	Column(
+		modifier = Modifier
+			.padding(16.dp)
+			.fillMaxWidth(),
+		verticalArrangement = Arrangement.spacedBy(16.dp)
+	) {
+		Text(
+			text = "Style 1: Pill (Current)",
+			style = MaterialTheme.typography.labelLarge,
+			color = Color.Black
+		)
+		CToastFillComponent(
+			title = "Success",
+			message = "Your action was completed successfully.",
+			iconRes = common.libs.compose.R.drawable.baseline_check_circle_24,
+			iconColor = Color(0xFF10B981),
+			backgroundColor = Color(0xFF10B981).copy(alpha = 0.1f),
+			textColor = Color.Black.copy(alpha = 0.8f),
+			iconScale = 1f
+		)
+
+		Text(
+			text = "Style 2: Modern Outlined",
+			style = MaterialTheme.typography.labelLarge,
+			color = Color.Black
+		)
+		CToastOutlinedComponent(
+			title = "Information",
+			message = "This is a modern outlined toast style.",
+			iconRes = common.libs.compose.R.drawable.outline_info_24,
+			iconColor = Color(0xFF3B82F6),
+			textColor = Color.Black.copy(alpha = 0.7f),
+			iconScale = 1f
+		)
+
+		Text(
+			text = "Style 3: Gradient Impact",
+			style = MaterialTheme.typography.labelLarge,
+			color = Color.Black
+		)
+		CToastGradientComponent(
+			title = "Attention",
+			message = "Important update available for your account.",
+			iconRes = common.libs.compose.R.drawable.outline_warning_24,
+			iconColor = Color(0xFFF59E0B),
+			iconScale = 1f
+		)
+	}
+}

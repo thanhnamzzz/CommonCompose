@@ -10,6 +10,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.graphicsLayer
@@ -45,16 +47,17 @@ import common.libs.compose.R
 
 /**
  * The core logic wrapper for the toast. It resolves styles, colors, and animations,
- * then delegates the actual rendering to [CToastComponent].
+ * then delegates the actual rendering to [CToastFillComponent].
  */
 @Composable
 internal fun CToastView(
 	data: CToastData,
+	layoutType: CToastLayout = CToastLayout.Fill,
 	config: CToastConfiguration = LocalCToastConfig.current
 ) {
 	// 1. Resolve Style Specification
-	val spec = remember(data.type/*, data.isDarkMode, data.isFullBackground*/) {
-		config.getStyleSpec(data.type/*, data.isDarkMode, data.isFullBackground*/)
+	val spec = remember(data.type) {
+		config.getStyleSpec(data.type)
 	}
 
 	// 2. Resolve Colors
@@ -83,22 +86,44 @@ internal fun CToastView(
 	)
 
 	// 4. Delegate Rendering
-	CToastComponent(
-		title = data.title ?: spec.defaultTitle,
-		message = data.message,
-		iconRes = spec.iconRes,
-		iconColor = iconColor,
-		backgroundColor = backgroundColor,
-		textColor = textColor,
-		iconScale = scale,
-	)
+	when (layoutType) {
+		CToastLayout.Fill ->
+			CToastFillComponent(
+				title = data.title ?: spec.defaultTitle,
+				message = data.message,
+				iconRes = spec.iconRes,
+				iconColor = iconColor,
+				backgroundColor = backgroundColor,
+				textColor = textColor,
+				iconScale = scale,
+			)
+
+		CToastLayout.Outlined ->
+			CToastOutlinedComponent(
+				title = data.title?:spec.defaultTitle,
+				message = data.message,
+				iconRes = spec.iconRes,
+				iconColor = iconColor,
+				textColor = textColor,
+				iconScale = scale,
+			)
+
+		CToastLayout.Gradient ->
+			CToastGradientComponent(
+				title = data.title ?: spec.defaultTitle,
+				message = data.message,
+				iconRes = spec.iconRes,
+				iconColor = iconColor,
+				iconScale = scale,
+			)
+	}
 }
 
 /**
  * A stateless presentational component that renders the toast UI.
  */
 @Composable
-fun CToastComponent(
+fun CToastFillComponent(
 	title: String,
 	message: String,
 	@DrawableRes iconRes: Int,
@@ -127,10 +152,6 @@ fun CToastComponent(
 					}
 					.clip(CircleShape)
 					.background(Color.White.copy(alpha = 0.95f)),
-//					.background(
-//						if (backgroundColor.luminance() < 0.5f) Color.White.copy(alpha = 0.2f)
-//						else contentColor.copy(alpha = 0.1f)
-//					),
 				contentAlignment = Alignment.Center
 			) {
 				Icon(
@@ -160,6 +181,113 @@ fun CToastComponent(
 					color = textColor,
 					style = MaterialTheme.typography.bodySmall
 				)
+			}
+		}
+	}
+}
+
+/**
+ * Display Style 2: Modern Outlined
+ * Background is mostly surface/white with a colored border and accented icon.
+ */
+@Composable
+fun CToastOutlinedComponent(
+	title: String,
+	message: String,
+	@DrawableRes iconRes: Int,
+	iconColor: Color,
+	textColor: Color,
+	iconScale: Float
+) {
+	Card(
+		modifier = Modifier.fillMaxWidth(),
+		shape = RoundedCornerShape(16.dp),
+		colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+		border = BorderStroke(1.5.dp, iconColor.copy(alpha = 0.5f))
+	) {
+		Row(
+			modifier = Modifier.height(IntrinsicSize.Min),
+			verticalAlignment = Alignment.CenterVertically
+		) {
+			Box(
+				modifier = Modifier
+					.padding(16.dp)
+					.size(32.dp)
+					.graphicsLayer {
+						scaleX = iconScale
+						scaleY = iconScale
+					}
+					.clip(CircleShape)
+					.background(iconColor.copy(alpha = 0.1f)),
+				contentAlignment = Alignment.Center
+			) {
+				Icon(
+					painter = painterResource(id = iconRes),
+					contentDescription = null,
+					tint = iconColor,
+					modifier = Modifier.size(20.dp)
+				)
+			}
+
+			Column(
+				modifier = Modifier
+					.weight(1f)
+					.padding(vertical = 12.dp)
+					.padding(end = 16.dp)
+			) {
+				Text(text = title, color = iconColor, style = MaterialTheme.typography.titleMedium)
+				Text(text = message, color = textColor, style = MaterialTheme.typography.bodySmall)
+			}
+		}
+	}
+}
+
+/**
+ * Display Style 3: Gradient Impact
+ * Uses a lush gradient background for high visual impact.
+ */
+@Composable
+fun CToastGradientComponent(
+	title: String,
+	message: String,
+	@DrawableRes iconRes: Int,
+	iconColor: Color,
+	iconScale: Float
+) {
+	val gradient = Brush.horizontalGradient(
+		colors = listOf(iconColor, iconColor.copy(alpha = 0.5f))
+	)
+
+	Card(
+		modifier = Modifier.fillMaxWidth(),
+		shape = RoundedCornerShape(12.dp),
+	) {
+		Row(
+			modifier = Modifier
+				.background(gradient)
+				.height(IntrinsicSize.Min)
+				.padding(12.dp),
+			verticalAlignment = Alignment.CenterVertically
+		) {
+			Icon(
+				painter = painterResource(id = iconRes),
+				contentDescription = null,
+				tint = Color.White,
+				modifier = Modifier
+					.size(28.dp)
+					.graphicsLayer {
+						scaleX = iconScale
+						scaleY = iconScale
+					}
+			)
+
+			Column(
+				modifier = Modifier
+					.weight(1f)
+					.padding(start = 12.dp)
+			) {
+				Text(text = title, color = Color.White, style = MaterialTheme.typography.titleMedium)
+				Text(text = message, color = Color.White.copy(alpha = 0.9f), style = MaterialTheme.typography.bodySmall)
 			}
 		}
 	}

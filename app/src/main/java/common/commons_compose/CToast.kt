@@ -37,6 +37,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import common.commons_compose.ui.theme.CommonComposeTheme
 import common.commons_compose.viewModels.ToastViewModel
 import common.libs.compose.toast.CToastConfiguration
+import common.libs.compose.toast.CToastLayout
 import common.libs.compose.toast.CToastType
 import common.libs.compose.toast.DURATION_LENGTH
 import common.libs.compose.toast.LocalToast
@@ -49,6 +50,7 @@ fun ToastScreen(
 	viewModel: ToastViewModel = hiltViewModel()
 ) {
 	val currentToastStyle = remember { mutableStateOf(CToastConfiguration.Classic) }
+	val currentLayoutToast = remember { mutableStateOf(CToastLayout.Fill) }
 	LaunchedEffect(Unit) {
 		viewModel.testFunction()
 	}
@@ -65,7 +67,7 @@ fun ToastScreen(
 //		LocalToast provides cToastState
 //	) {
 
-	CommonComposeTheme(toastConfig = currentToastStyle.value) {
+	CommonComposeTheme(toastConfig = currentToastStyle.value, toastLayout = currentLayoutToast.value) {
 		val ct = LocalToast.current
 		Column(
 			modifier = modifier
@@ -89,6 +91,17 @@ fun ToastScreen(
 					color = MaterialTheme.colorScheme.onBackground
 				)
 			}
+			Text(
+				text = "Layout Toast",
+				fontSize = 18.sp,
+				color = Color.Black
+			)
+			ListLayout(
+				selectLayout = currentLayoutToast.value,
+				onLayoutChange = {
+					currentLayoutToast.value = it
+				}
+			)
 			Text(
 				text = "Config Toast",
 				fontSize = 18.sp,
@@ -189,7 +202,54 @@ fun ToastScreen(
 //	}
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview
+@Composable
+fun ListLayout(
+	modifier: Modifier = Modifier,
+	selectLayout: CToastLayout = CToastLayout.Fill,
+	onLayoutChange: (CToastLayout) -> Unit = {}
+) {
+	val layouts = remember {
+		listOf(
+			"Fill" to CToastLayout.Fill,
+			"Gradient" to CToastLayout.Gradient,
+			"Outlined" to CToastLayout.Outlined,
+		)
+	}
+
+	LazyRow(
+		modifier = modifier
+			.fillMaxWidth()
+			.padding(vertical = 12.dp),
+		horizontalArrangement = Arrangement.spacedBy(8.dp),
+		contentPadding = PaddingValues(horizontal = 20.dp)
+	) {
+		items(layouts) { (name, config) ->
+			val isSelected = selectLayout == config
+
+			Button(
+				onClick = { onLayoutChange(config) },
+				shape = RoundedCornerShape(12.dp),
+				colors = ButtonDefaults.buttonColors(
+					containerColor = if (isSelected) MaterialTheme.colorScheme.primary
+					else MaterialTheme.colorScheme.surfaceVariant,
+					contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary
+					else MaterialTheme.colorScheme.onSurfaceVariant
+				),
+				elevation = ButtonDefaults.buttonColors().let {
+					if (isSelected) ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+					else ButtonDefaults.buttonElevation()
+				}
+			) {
+				Text(
+					text = name,
+					fontSize = 16.sp,
+				)
+			}
+		}
+	}
+}
+
 @Composable
 fun ListConfig(
 	modifier: Modifier = Modifier,

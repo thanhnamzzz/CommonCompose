@@ -168,6 +168,7 @@ internal data class StyleSpec(
 
 //enum class CToastPosition { TOP, BOTTOM, CENTER }
 enum class CToastType { SUCCESS, ERROR, WARNING, INFO }
+enum class CToastLayout { Fill, Outlined, Gradient }
 
 const val DURATION_SHORT = 1800L
 const val DURATION_LENGTH = 3400L
