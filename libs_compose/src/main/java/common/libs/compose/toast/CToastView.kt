@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import common.libs.compose.R
 
@@ -100,7 +101,7 @@ internal fun CToastView(
 
 		CToastLayout.Outlined ->
 			CToastOutlinedComponent(
-				title = data.title?:spec.defaultTitle,
+				title = data.title ?: spec.defaultTitle,
 				message = data.message,
 				iconRes = spec.iconRes,
 				iconColor = iconColor,
@@ -114,8 +115,31 @@ internal fun CToastView(
 				message = data.message,
 				iconRes = spec.iconRes,
 				iconColor = iconColor,
+				backgroundColor = backgroundColor,
 				iconScale = scale,
 			)
+
+		CToastLayout.Stacked ->
+			CToastStackedComponent(
+				title = data.title ?: spec.defaultTitle,
+				message = data.message,
+				iconRes = spec.iconRes,
+				iconColor = iconColor,
+				backgroundColor = backgroundColor,
+				textColor = textColor,
+				iconScale = scale,
+			)
+
+//		CToastLayout.IconRight ->
+//			CToastIconRightComponent(
+//				title = data.title ?: spec.defaultTitle,
+//				message = data.message,
+//				iconRes = spec.iconRes,
+//				iconColor = iconColor,
+//				backgroundColor = backgroundColor,
+//				textColor = textColor,
+//				iconScale = scale,
+//			)
 	}
 }
 
@@ -235,7 +259,7 @@ fun CToastOutlinedComponent(
 					.padding(vertical = 12.dp)
 					.padding(end = 16.dp)
 			) {
-				Text(text = title, color = iconColor, style = MaterialTheme.typography.titleMedium)
+				Text(text = title, color = iconColor, style = MaterialTheme.typography.titleSmall)
 				Text(text = message, color = textColor, style = MaterialTheme.typography.bodySmall)
 			}
 		}
@@ -252,6 +276,7 @@ fun CToastGradientComponent(
 	message: String,
 	@DrawableRes iconRes: Int,
 	iconColor: Color,
+	backgroundColor: Color,
 	iconScale: Float
 ) {
 	val gradient = Brush.horizontalGradient(
@@ -260,7 +285,8 @@ fun CToastGradientComponent(
 
 	Card(
 		modifier = Modifier.fillMaxWidth(),
-		shape = RoundedCornerShape(12.dp),
+		shape = RoundedCornerShape(dimensionResource(R.dimen.dimen_100)),
+		colors = CardDefaults.cardColors(containerColor = backgroundColor)
 	) {
 		Row(
 			modifier = Modifier
@@ -286,9 +312,152 @@ fun CToastGradientComponent(
 					.weight(1f)
 					.padding(start = 12.dp)
 			) {
-				Text(text = title, color = Color.White, style = MaterialTheme.typography.titleMedium)
-				Text(text = message, color = Color.White.copy(alpha = 0.9f), style = MaterialTheme.typography.bodySmall)
+				Text(
+					text = title,
+					color = Color.White,
+					style = MaterialTheme.typography.titleSmall
+				)
+				Text(
+					text = message,
+					color = Color.White.copy(alpha = 0.9f),
+					style = MaterialTheme.typography.bodySmall
+				)
 			}
 		}
 	}
 }
+
+/**
+ * Display Style 4: Stacked Vertical
+ * Icon on top, centered text below.
+ */
+@Composable
+fun CToastStackedComponent(
+	title: String,
+	message: String,
+	@DrawableRes iconRes: Int,
+	iconColor: Color,
+	backgroundColor: Color,
+	textColor: Color,
+	iconScale: Float
+) {
+	Card(
+		modifier = Modifier.fillMaxWidth(),
+		shape = RoundedCornerShape(24.dp),
+		colors = CardDefaults.cardColors(containerColor = backgroundColor)
+	) {
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(12.dp),
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			Box(
+				modifier = Modifier
+					.size(34.dp)
+					.graphicsLayer {
+						scaleX = iconScale
+						scaleY = iconScale
+					}
+					.clip(CircleShape)
+					.background(Color.White),
+				contentAlignment = Alignment.Center
+			) {
+				Icon(
+					painter = painterResource(id = iconRes),
+					contentDescription = null,
+					tint = iconColor,
+				)
+			}
+
+			Column(
+				modifier = Modifier.fillMaxWidth().padding(top = 5.dp),
+				horizontalAlignment = Alignment.CenterHorizontally
+			) {
+				Text(
+					text = title,
+					color = textColor,
+					style = MaterialTheme.typography.titleSmall,
+					textAlign = TextAlign.Center
+				)
+				Text(
+					text = message,
+					color = textColor.copy(alpha = 0.8f),
+					style = MaterialTheme.typography.bodySmall,
+					textAlign = TextAlign.Center
+				)
+			}
+		}
+	}
+}
+
+///**
+// * Display Style 5: Icon Right
+// * Text on the left, icon on the right.
+// */
+//@Composable
+//fun CToastIconRightComponent(
+//	title: String,
+//	message: String,
+//	@DrawableRes iconRes: Int,
+//	iconColor: Color,
+//	backgroundColor: Color,
+//	textColor: Color,
+//	iconScale: Float
+//) {
+//	Card(
+//		modifier = Modifier.fillMaxWidth(),
+//		shape = RoundedCornerShape(dimensionResource(R.dimen.dimen_100)),
+//		elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+//		colors = CardDefaults.cardColors(containerColor = backgroundColor)
+//	) {
+//		Row(
+//			modifier = Modifier.height(IntrinsicSize.Min),
+//			verticalAlignment = Alignment.CenterVertically
+//		) {
+//			// Text Content Section
+//			Column(
+//				modifier = Modifier
+//					.weight(1f)
+//					.padding(vertical = 10.dp)
+//					.padding(start = 30.dp, end = 15.dp)
+//			) {
+//				Text(
+//					modifier = Modifier.fillMaxWidth(),
+//					text = title,
+//					color = textColor,
+//					style = MaterialTheme.typography.titleSmall,
+//					textAlign = TextAlign.End
+//				)
+//				Text(
+//					modifier = Modifier.fillMaxWidth(),
+//					text = message,
+//					color = textColor,
+//					style = MaterialTheme.typography.bodySmall,
+//					textAlign = TextAlign.End
+//				)
+//			}
+//			// Icon Section
+//			Box(
+//				modifier = Modifier
+//					.padding(end = 14.dp, top = 10.dp, bottom = 10.dp)
+//					.graphicsLayer {
+//						scaleX = iconScale
+//						scaleY = iconScale
+//					}
+//					.clip(CircleShape)
+//					.background(Color.White.copy(alpha = 0.95f)),
+//				contentAlignment = Alignment.Center
+//			) {
+//				Icon(
+//					painter = painterResource(id = iconRes),
+//					contentDescription = title,
+//					tint = iconColor,
+//					modifier = Modifier
+//						.padding(8.dp)
+//						.size(20.dp)
+//				)
+//			}
+//		}
+//	}
+//}

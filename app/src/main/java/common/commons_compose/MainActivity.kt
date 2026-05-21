@@ -57,6 +57,7 @@ import common.libs.compose.shimmer.shimmerSpec
 import common.libs.compose.toast.CToastFillComponent
 import common.libs.compose.toast.CToastGradientComponent
 import common.libs.compose.toast.CToastOutlinedComponent
+import common.libs.compose.toast.CToastStackedComponent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -308,7 +309,38 @@ fun ToastFillStylesPreview() {
 			message = "Important update available for your account.",
 			iconRes = common.libs.compose.R.drawable.outline_warning_24,
 			iconColor = Color(0xFFF59E0B),
+			backgroundColor = Color(0xFFFFFBEB),
 			iconScale = 1f
 		)
+
+		Text(
+			text = "Style 4: Stacked Vertical",
+			style = MaterialTheme.typography.labelLarge,
+			color = Color.Black
+		)
+		CToastStackedComponent(
+			title = "Event Reminder",
+			message = "You have a meeting starting in 15 minutes in Room 302.",
+			iconRes = common.libs.compose.R.drawable.outline_info_24,
+			iconColor = Color(0xFF8B5CF6),
+			backgroundColor = Color(0xFFF5F3FF),
+			textColor = Color.Black.copy(alpha = 0.8f),
+			iconScale = 1f
+		)
+
+//		Text(
+//			text = "Style 5: Icon Right",
+//			style = MaterialTheme.typography.labelLarge,
+//			color = Color.Black
+//		)
+//		CToastIconRightComponent(
+//			title = "Download Complete",
+//			message = "Your file has been downloaded successfully to the folder.",
+//			iconRes = common.libs.compose.R.drawable.baseline_check_circle_24,
+//			iconColor = Color(0xFF10B981),
+//			backgroundColor = Color(0xFFECFDF5),
+//			textColor = Color.Black.copy(alpha = 0.8f),
+//			iconScale = 1f
+//		)
 	}
 }

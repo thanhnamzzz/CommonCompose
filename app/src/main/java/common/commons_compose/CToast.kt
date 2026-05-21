@@ -214,6 +214,7 @@ fun ListLayout(
 			"Fill" to CToastLayout.Fill,
 			"Gradient" to CToastLayout.Gradient,
 			"Outlined" to CToastLayout.Outlined,
+			"Stacked" to CToastLayout.Stacked,
 		)
 	}
 
