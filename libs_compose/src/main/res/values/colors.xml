@@ -1,16 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Classic Colors (Material 2 Standard) -->
     <color name="warning_color">#FFC107</color>
     <color name="error_color">#F44336</color>
     <color name="success_color">#4CAF50</color>
     <color name="info_color">#2196F3</color>
-    <color name="delete_color">#F44336</color>
-
     <color name="error_bg_color">#33F44336</color>
     <color name="success_bg_color">#334CAF50</color>
     <color name="info_bg_color">#332196F3</color>
-    <color name="delete_bg_color">#33F44336</color>
     <color name="warning_bg_color">#33FFC107</color>
+
+    <!-- Modern (Professional Slate/Teal) -->
+    <color name="ctoast_success_modern">#0D9488</color> <!-- Teal 600 -->
+    <color name="ctoast_error_modern">#E11D48</color> <!-- Rose 600 -->
+    <color name="ctoast_warning_modern">#D97706</color> <!-- Amber 600 -->
+    <color name="ctoast_info_modern">#4F46E5</color> <!-- Indigo 600 -->
+    <color name="ctoast_success_bg_modern">#1A0D9488</color>
+    <color name="ctoast_error_bg_modern">#1AE11D48</color>
+    <color name="ctoast_warning_bg_modern">#1AD97706</color>
+    <color name="ctoast_info_bg_modern">#1A4F46E5</color>
+
+    <!-- Pastel (Soft/Candy/Creamy) -->
+    <color name="ctoast_success_pastel">#34D399</color>
+    <color name="ctoast_error_pastel">#F87171</color>
+    <color name="ctoast_warning_pastel">#FBBF24</color>
+    <color name="ctoast_info_pastel">#818CF8</color>
+    <color name="ctoast_success_bg_pastel">#F0FDF4</color>
+    <color name="ctoast_error_bg_pastel">#FEF2F2</color>
+    <color name="ctoast_warning_bg_pastel">#FFFBEB</color>
+    <color name="ctoast_info_bg_pastel">#EEF2FF</color>
+
+    <!-- Vivid (Neon/Cyberpunk/High Energy) -->
+    <color name="ctoast_success_vivid">#ADFF2F</color> <!-- Green Yellow -->
+    <color name="ctoast_error_vivid">#FF00FF</color> <!-- Magenta -->
+    <color name="ctoast_warning_vivid">#FFD700</color> <!-- Gold -->
+    <color name="ctoast_info_vivid">#00FFFF</color> <!-- Cyan -->
+    <color name="ctoast_success_bg_vivid">#26ADFF2F</color>
+    <color name="ctoast_error_bg_vivid">#26FF00FF</color>
+    <color name="ctoast_warning_bg_vivid">#26FFD700</color>
+    <color name="ctoast_info_bg_vivid">#2600FFFF</color>
+
+    <!-- Earth (Organic/Warm/Grounded) -->
+    <color name="ctoast_success_earth">#6B8E23</color> <!-- Olive Drab -->
+    <color name="ctoast_error_earth">#A52A2A</color> <!-- Brown/Terracotta -->
+    <color name="ctoast_warning_earth">#CC7722</color> <!-- Ochre -->
+    <color name="ctoast_info_earth">#4682B4</color> <!-- Steel Blue -->
+    <color name="ctoast_success_bg_earth">#1A6B8E23</color>
+    <color name="ctoast_error_bg_earth">#1AA52A2A</color>
+    <color name="ctoast_warning_bg_earth">#1ACC7722</color>
+    <color name="ctoast_info_bg_earth">#1A4682B4</color>
+
+    <!-- Nord Palette (Arctic/Cool/Professional) -->
+    <color name="ctoast_success_nord">#A3BE8C</color>
+    <color name="ctoast_error_nord">#BF616A</color>
+    <color name="ctoast_warning_nord">#EBCB8B</color>
+    <color name="ctoast_info_nord">#81A1C1</color>
+    <color name="ctoast_success_bg_nord">#26A3BE8C</color>
+    <color name="ctoast_error_bg_nord">#26BF616A</color>
+    <color name="ctoast_warning_bg_nord">#26EBCB8B</color>
+    <color name="ctoast_info_bg_nord">#2681A1C1</color>
+
+    <!-- Material Light (Very Soft/Clean) -->
+    <color name="toast_success_bg">#E8F5E9</color>
+    <color name="toast_error_bg">#FFEBEE</color>
+    <color name="toast_warning_bg">#FFF8E1</color>
+    <color name="toast_info_bg">#E3F2FD</color>
+
+    <color name="delete_color">#F44336</color>
+    <color name="delete_bg_color">#33F44336</color>
     <color name="no_internet">#FF9800</color>
     <color name="dark_color">#343434</color>
 </resources>

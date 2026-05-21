@@ -24,8 +24,6 @@ import java.util.UUID
  * @property type The visual style of the toast (e.g., SUCCESS, ERROR).
  * @property duration The time in milliseconds for which the toast will be visible before
  * it automatically dismisses.
- * @property isDarkMode Whether the toast should render in its dark theme variant. This should
- * typically be derived from the app's current theme (e.g., using `isSystemInDarkTheme()`).
  * @property isFullBackground If true, the toast background will be a solid color. If false,
  * it will have a side-bar style.
  * @property position The screen position where the toast will appear (TOP, CENTER, or BOTTOM).
@@ -37,7 +35,6 @@ internal class CToastData(
 	val title: String? = null,
 	val type: CToastType = CToastType.SUCCESS,
 	val duration: Long = DURATION_SHORT,
-	val isDarkMode: Boolean = false,
 	val isFullBackground: Boolean = true,
 //	val position: CToastPosition
 )
@@ -78,7 +75,6 @@ class CToastState {
 	 * @param title An optional title.
 	 * @param type The style of the toast (SUCCESS, ERROR, etc.).
 	 * @param duration How long the toast should be visible.
-	 * @param isDarkMode Set to true for a dark theme look.
 	 * @param isFullBackground Set to true for a solid background color.
 	 * @param position The gravity of the toast on the screen.
 	 */
@@ -87,7 +83,6 @@ class CToastState {
 		title: String? = null,
 		type: CToastType = CToastType.SUCCESS,
 		duration: Long = DURATION_SHORT,
-		isDarkMode: Boolean = false,
 		isFullBackground: Boolean = true,
 //		position: CToastPosition = CToastPosition.BOTTOM
 	) {
@@ -101,7 +96,6 @@ class CToastState {
 				title = title,
 				type = type,
 				duration = duration,
-				isDarkMode = isDarkMode,
 				isFullBackground = isFullBackground,
 //				position = position
 			)
@@ -120,7 +114,6 @@ class CToastState {
 				title = title,
 				type = type,
 				duration = duration,
-				isDarkMode = false,
 				isFullBackground = true,
 			)
 		}

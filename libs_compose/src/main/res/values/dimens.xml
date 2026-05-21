@@ -11,4 +11,5 @@
     <!-- Dimensions for the Icon with background -->
     <dimen name="dimen_24">24dp</dimen>
     <dimen name="dimen_40">40dp</dimen>
+    <dimen name="dimen_100">100dp</dimen>
 </resources>

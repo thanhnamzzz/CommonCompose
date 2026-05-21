@@ -45,6 +45,7 @@ fun CommonComposeTheme(
 	darkTheme: Boolean = isSystemInDarkTheme(),
 	// Dynamic color is available on Android 12+
 	dynamicColor: Boolean = true,
+	toastConfig: CToastConfiguration = CToastConfiguration.Classic,
 	content: @Composable () -> Unit
 ) {
 	val colorScheme = when {
@@ -62,7 +63,7 @@ fun CommonComposeTheme(
 		typography = Typography,
 		content = {
 			CompositionLocalProvider(
-				LocalCToastConfig provides CToastConfiguration(),
+				LocalCToastConfig provides toastConfig,
 				LocalToast provides CToastState()
 			) {
 				content()

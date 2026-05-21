@@ -83,7 +83,7 @@ fun CToastHost(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 10.dp, vertical = 16.dp),
+            .padding(horizontal = 24.dp, vertical = 16.dp),
         contentAlignment = alignment
     ) {
         AnimatedContent(

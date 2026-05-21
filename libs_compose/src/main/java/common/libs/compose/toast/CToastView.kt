@@ -3,6 +3,7 @@
  */
 package common.libs.compose.toast
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -10,17 +11,15 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -35,7 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -43,51 +44,37 @@ import androidx.compose.ui.unit.dp
 import common.libs.compose.R
 
 /**
- * The core visual composable for displaying a toast. This function is responsible for
- * rendering the toast's UI based on the provided data and configuration. It is stateless
- * and purely presentational.
- *
- * This composable uses a [Card] to create the main body with elevation and rounded corners.
- * The layout is a [Row] containing an icon and a [Column] for the title and message.
- * The styling (colors, icon) is dynamically determined by the [StyleSpec] resolved from
- * the configuration.
- *
- * @param data The [CToastData] object containing all the content to display (message,
- *   title, type, etc.).
- * @param config The [CToastConfiguration] used to resolve the visual style of the toast.
- *   This is typically provided via [LocalCToastConfig].
+ * The core logic wrapper for the toast. It resolves styles, colors, and animations,
+ * then delegates the actual rendering to [CToastComponent].
  */
 @Composable
-internal fun CToastView(data: CToastData, config: CToastConfiguration) {
-	// Resolve the style specification (colors, icon) from the configuration.
-	// `remember` is used here to avoid re-calculating the spec on every recomposition
-	// unless one of the key inputs (type, theme, background style) changes.
-	val spec = remember(data.type, data.isDarkMode, data.isFullBackground) {
-		config.getStyleSpec(data.type, data.isDarkMode, data.isFullBackground)
+internal fun CToastView(
+	data: CToastData,
+	config: CToastConfiguration = LocalCToastConfig.current
+) {
+	// 1. Resolve Style Specification
+	val spec = remember(data.type/*, data.isDarkMode, data.isFullBackground*/) {
+		config.getStyleSpec(data.type/*, data.isDarkMode, data.isFullBackground*/)
 	}
 
-	// Resolve the color resources from the style spec.
-	val primaryColor = colorResource(id = spec.primaryColor)
+	// 2. Resolve Colors
+	val iconColor = colorResource(id = spec.iconColor)
 	val backgroundColor = colorResource(id = spec.backgroundColor)
 
-	// For solid or dark backgrounds, white text provides the best contrast.
-	val textColor = when {
-		data.isFullBackground -> Color.White
-		data.isDarkMode -> Color.White
-		else -> Color.Black
-	}
+	val surfaceColor = if (isSystemInDarkTheme()) Color(0xFF121212) else Color.White
+	val isDarkBg = backgroundColor.compositeOver(surfaceColor).luminance() < 0.5f
 
-	// The title color is usually the primary color, but on a dark, solid background, white is more readable.
-	val titleColor = if (data.isFullBackground || data.isDarkMode) {
+	val textColor = if (isDarkBg) {
 		Color.White
 	} else {
-		primaryColor
+		Color.Black.copy(alpha = 0.9f)
 	}
 
+	// 3. Animation Logic
 	val infiniteTransition = rememberInfiniteTransition(label = "icon_pulse_transition")
 	val scale by infiniteTransition.animateFloat(
-		initialValue = 1f, // Start at normal size
-		targetValue = 1.2f, // Scale up to 120%
+		initialValue = 1f,
+		targetValue = 1.17f,
 		animationSpec = infiniteRepeatable(
 			animation = tween(durationMillis = 800, easing = FastOutSlowInEasing),
 			repeatMode = RepeatMode.Reverse
@@ -95,9 +82,34 @@ internal fun CToastView(data: CToastData, config: CToastConfiguration) {
 		label = "icon_pulse_scale"
 	)
 
+	// 4. Delegate Rendering
+	CToastComponent(
+		title = data.title ?: spec.defaultTitle,
+		message = data.message,
+		iconRes = spec.iconRes,
+		iconColor = iconColor,
+		backgroundColor = backgroundColor,
+		textColor = textColor,
+		iconScale = scale,
+	)
+}
+
+/**
+ * A stateless presentational component that renders the toast UI.
+ */
+@Composable
+fun CToastComponent(
+	title: String,
+	message: String,
+	@DrawableRes iconRes: Int,
+	iconColor: Color,
+	backgroundColor: Color,
+	textColor: Color = Color.White,
+	iconScale: Float
+) {
 	Card(
 		modifier = Modifier.fillMaxWidth(),
-		shape = RoundedCornerShape(dimensionResource(R.dimen.dimen_12)),
+		shape = RoundedCornerShape(dimensionResource(R.dimen.dimen_100)),
 		elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
 		colors = CardDefaults.cardColors(containerColor = backgroundColor)
 	) {
@@ -105,128 +117,50 @@ internal fun CToastView(data: CToastData, config: CToastConfiguration) {
 			modifier = Modifier.height(IntrinsicSize.Min),
 			verticalAlignment = Alignment.CenterVertically
 		) {
-			// Display the colored side-bar only for the non-solid background style.
-			if (!data.isFullBackground) {
-				Box(
-					modifier = Modifier
-						.width(dimensionResource(R.dimen.dimen_6))
-						.fillMaxHeight()
-						.background(primaryColor)
-				)
-			} else {
-				Spacer(
-					modifier = Modifier
-						.width(dimensionResource(R.dimen.dimen_6))
-						.fillMaxHeight()
-				)
-			}
-
+			// Icon Section
 			Box(
 				modifier = Modifier
-					.padding(8.dp)
+					.padding(start = 14.dp, end = 10.dp, top = 10.dp, bottom = 10.dp)
 					.graphicsLayer {
-						scaleX = scale
-						scaleY = scale
+						scaleX = iconScale
+						scaleY = iconScale
 					}
 					.clip(CircleShape)
-					.background(Color.White),
+					.background(Color.White.copy(alpha = 0.95f)),
+//					.background(
+//						if (backgroundColor.luminance() < 0.5f) Color.White.copy(alpha = 0.2f)
+//						else contentColor.copy(alpha = 0.1f)
+//					),
 				contentAlignment = Alignment.Center
 			) {
 				Icon(
-					painter = painterResource(id = spec.iconRes),
-					contentDescription = data.title ?: spec.defaultTitle,
-					tint = primaryColor,
+					painter = painterResource(id = iconRes),
+					contentDescription = title,
+					tint = iconColor,
 					modifier = Modifier
-						.padding(dimensionResource(R.dimen.dimen_8))
-						.size(dimensionResource(R.dimen.dimen_24))
+						.padding(8.dp)
+						.size(20.dp)
 				)
 			}
 
-			// A Column to arrange the title and message vertically.
+			// Text Content Section
 			Column(
 				modifier = Modifier
-					.weight(1f) // Takes up the remaining horizontal space
-					.padding(vertical = dimensionResource(R.dimen.dimen_10))
-					.padding(end = dimensionResource(R.dimen.dimen_6))
+					.weight(1f)
+					.padding(vertical = 12.dp)
+					.padding(end = 12.dp)
 			) {
 				Text(
-					text = data.title ?: spec.defaultTitle,
-					color = titleColor,
+					text = title,
+					color = textColor,
 					style = MaterialTheme.typography.titleSmall
 				)
-//                Spacer(modifier = Modifier.height(2.dp))
 				Text(
-					text = data.message,
+					text = message,
 					color = textColor,
 					style = MaterialTheme.typography.bodySmall
-				)
-			}
-
-			if (!data.isFullBackground) {
-				Box(
-					modifier = Modifier
-						.width(dimensionResource(R.dimen.dimen_6))
-						.fillMaxHeight()
-						.background(primaryColor)
-				)
-			} else {
-				Spacer(
-					modifier = Modifier
-						.width(dimensionResource(R.dimen.dimen_6))
-						.fillMaxHeight()
 				)
 			}
 		}
 	}
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun NiceToastViewPreview_No_FullBackground() {
-//	CToastView(
-//		data = CToastData(
-//			message = "This is a sample success message to demonstrate the NiceToastView composable.",
-//			title = "Success",
-//			type = CToastType.SUCCESS,
-//			duration = 4000L,
-//			isDarkMode = false,
-//			isFullBackground = false,
-////            position = CToastPosition.BOTTOM
-//		),
-//		config = CToastConfiguration()
-//	)
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//private fun NiceToastViewPreview_FullBackground_DarkMode() {
-//	CToastView(
-//		data = CToastData(
-//			message = "This is a sample error message to demonstrate the NiceToastView composable with full background in dark mode.",
-//			title = "Error",
-//			type = CToastType.ERROR,
-//			duration = 4000L,
-//			isDarkMode = true,
-//			isFullBackground = true,
-////            position = CToastPosition.BOTTOM
-//		),
-//		config = CToastConfiguration()
-//	)
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//private fun NiceToastViewPreview_FullBackground_LightMode() {
-//	CToastView(
-//		data = CToastData(
-//			message = "This is a sample warning message to demonstrate the NiceToastView composable with full background in light mode.",
-//			title = "Warning",
-//			type = CToastType.WARNING,
-//			duration = 4000L,
-//			isDarkMode = false,
-//			isFullBackground = true,
-////            position = CToastPosition.BOTTOM
-//		),
-//		config = CToastConfiguration()
-//	)
-//}

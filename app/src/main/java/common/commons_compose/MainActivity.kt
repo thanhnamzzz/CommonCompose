@@ -105,7 +105,7 @@ fun HomeScreen(
 	) {
 		Column(
 			modifier = modifier
-                .fillMaxSize()
+				.fillMaxSize()
 				.background(Color.Gray)
 				.verticalScroll(scrollState),
 			horizontalAlignment = Alignment.CenterHorizontally,
