@@ -47,8 +47,8 @@ import androidx.compose.ui.unit.dp
 import common.libs.compose.R
 
 /**
- * The core logic wrapper for the toast. It resolves styles, colors, and animations,
- * then delegates the actual rendering to [CToastFillComponent].
+ * Lớp bao bọc logic cốt lõi cho toast. Nó xử lý kiểu dáng, màu sắc và hiệu ứng động,
+ * sau đó chuyển giao việc hiển thị thực tế cho [CToastFillComponent].
  */
 @Composable
 internal fun CToastView(
@@ -56,12 +56,12 @@ internal fun CToastView(
 	layoutType: CToastLayout = CToastLayout.Fill,
 	config: CToastConfiguration = LocalCToastConfig.current
 ) {
-	// 1. Resolve Style Specification
+	// 1. Phân giải Đặc tả Kiểu dáng
 	val spec = remember(data.type) {
 		config.getStyleSpec(data.type)
 	}
 
-	// 2. Resolve Colors
+	// 2. Phân giải Màu sắc
 	val iconColor = colorResource(id = spec.iconColor)
 	val backgroundColor = colorResource(id = spec.backgroundColor)
 
@@ -74,7 +74,7 @@ internal fun CToastView(
 		Color.Black.copy(alpha = 0.9f)
 	}
 
-	// 3. Animation Logic
+	// 3. Logic Hiệu ứng động
 	val infiniteTransition = rememberInfiniteTransition(label = "icon_pulse_transition")
 	val scale by infiniteTransition.animateFloat(
 		initialValue = 1f,
@@ -86,7 +86,7 @@ internal fun CToastView(
 		label = "icon_pulse_scale"
 	)
 
-	// 4. Delegate Rendering
+	// 4. Chuyển giao Hiển thị
 	when (layoutType) {
 		CToastLayout.Fill ->
 			CToastFillComponent(
@@ -144,7 +144,7 @@ internal fun CToastView(
 }
 
 /**
- * A stateless presentational component that renders the toast UI.
+ * Một thành phần trình diễn không trạng thái (stateless) dùng để hiển thị giao diện người dùng của toast.
  */
 @Composable
 fun CToastFillComponent(
@@ -166,7 +166,7 @@ fun CToastFillComponent(
 			modifier = Modifier.height(IntrinsicSize.Min),
 			verticalAlignment = Alignment.CenterVertically
 		) {
-			// Icon Section
+			// Phần Biểu tượng
 			Box(
 				modifier = Modifier
 					.padding(start = 14.dp, end = 10.dp, top = 10.dp, bottom = 10.dp)
@@ -188,7 +188,7 @@ fun CToastFillComponent(
 				)
 			}
 
-			// Text Content Section
+			// Phần Nội dung Văn bản
 			Column(
 				modifier = Modifier
 					.weight(1f)
@@ -211,8 +211,8 @@ fun CToastFillComponent(
 }
 
 /**
- * Display Style 2: Modern Outlined
- * Background is mostly surface/white with a colored border and accented icon.
+ * Kiểu hiển thị 2: Viền Hiện đại
+ * Nền chủ yếu là bề mặt/trắng với viền có màu và biểu tượng được nhấn mạnh.
  */
 @Composable
 fun CToastOutlinedComponent(
@@ -267,8 +267,8 @@ fun CToastOutlinedComponent(
 }
 
 /**
- * Display Style 3: Gradient Impact
- * Uses a lush gradient background for high visual impact.
+ * Kiểu hiển thị 3: Hiệu ứng Gradient
+ * Sử dụng nền gradient rực rỡ để tạo tác động thị giác cao.
  */
 @Composable
 fun CToastGradientComponent(
@@ -328,8 +328,8 @@ fun CToastGradientComponent(
 }
 
 /**
- * Display Style 4: Stacked Vertical
- * Icon on top, centered text below.
+ * Kiểu hiển thị 4: Xếp chồng Dọc
+ * Biểu tượng ở trên, văn bản căn giữa ở dưới.
  */
 @Composable
 fun CToastStackedComponent(
@@ -392,8 +392,8 @@ fun CToastStackedComponent(
 }
 
 ///**
-// * Display Style 5: Icon Right
-// * Text on the left, icon on the right.
+// * Kiểu hiển thị 5: Biểu tượng bên Phải
+// * Văn bản bên trái, biểu tượng bên phải.
 // */
 //@Composable
 //fun CToastIconRightComponent(
@@ -415,7 +415,7 @@ fun CToastStackedComponent(
 //			modifier = Modifier.height(IntrinsicSize.Min),
 //			verticalAlignment = Alignment.CenterVertically
 //		) {
-//			// Text Content Section
+//			// Phần Nội dung Văn bản
 //			Column(
 //				modifier = Modifier
 //					.weight(1f)
@@ -437,7 +437,7 @@ fun CToastStackedComponent(
 //					textAlign = TextAlign.End
 //				)
 //			}
-//			// Icon Section
+//			// Phần Biểu tượng
 //			Box(
 //				modifier = Modifier
 //					.padding(end = 14.dp, top = 10.dp, bottom = 10.dp)

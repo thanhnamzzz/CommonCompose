@@ -11,11 +11,11 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import common.libs.compose.R
 
 /**
- * Configuration for Compose NiceToast components.
+ * Cấu hình cho các thành phần NiceToast trong Compose.
  *
- * This class is marked as @Immutable to help the Compose compiler optimize recompositions.
- * It follows a builder-like pattern where you create a modified copy of the configuration
- * instead of changing its properties directly.
+ * Lớp này được đánh dấu là @Immutable để giúp trình biên dịch Compose tối ưu hóa quá trình recomposition.
+ * Nó tuân theo mẫu giống như builder, nơi bạn tạo một bản sao đã sửa đổi của cấu hình
+ * thay vì thay đổi trực tiếp các thuộc tính của nó.
  */
 @Immutable
 data class CToastConfiguration(
@@ -30,8 +30,8 @@ data class CToastConfiguration(
 	@param:ColorRes val infoBackgroundToastColor: Int = R.color.info_bg_color,
 ) {
 	/**
-	 * Internal function to resolve the style based on the toast type and theme.
-	 * This logic is now part of the immutable configuration object.
+	 * Hàm nội bộ để phân giải kiểu dáng dựa trên loại toast và chủ đề.
+	 * Logic này hiện là một phần của đối tượng cấu hình bất biến.
 	 */
 	internal fun getStyleSpec(toastType: CToastType/*, darkTheme: Boolean, solidBackground: Boolean*/): StyleSpec {
 		val iconColor = when (toastType) {
@@ -65,12 +65,12 @@ data class CToastConfiguration(
 
 	companion object {
 		/**
-		 * Classic: Material Design 2 Standard colors.
+		 * Classic: Các màu tiêu chuẩn của Material Design 2.
 		 */
 		val Classic = CToastConfiguration()
 
 		/**
-		 * Modern (Slate/Professional): Clean, professional Teal and Indigo tones.
+		 * Modern (Slate/Professional): Các tông màu Teal và Indigo sạch sẽ, chuyên nghiệp.
 		 */
 		val Modern = CToastConfiguration(
 			successToastColor = R.color.ctoast_success_modern,
@@ -84,7 +84,7 @@ data class CToastConfiguration(
 		)
 
 		/**
-		 * Pastel (Soft/Candy): Very light, milky colors for a soft aesthetic.
+		 * Pastel (Soft/Candy): Các màu rất nhẹ, màu sữa cho thẩm mỹ mềm mại.
 		 */
 		val Pastel = CToastConfiguration(
 			successToastColor = R.color.ctoast_success_pastel,
@@ -98,7 +98,7 @@ data class CToastConfiguration(
 		)
 
 		/**
-		 * Vivid (Neon/Cyberpunk): High-saturation Magenta and Cyan for impact.
+		 * Vivid (Neon/Cyberpunk): Màu Magenta và Cyan độ bão hòa cao để tạo ấn tượng.
 		 */
 		val Vivid = CToastConfiguration(
 			successToastColor = R.color.ctoast_success_vivid,
@@ -112,7 +112,7 @@ data class CToastConfiguration(
 		)
 
 		/**
-		 * Earth (Natural/Organic): Grounded tones like Olive and Terracotta.
+		 * Earth (Natural/Organic): Các tông màu tự nhiên như Olive và Terracotta.
 		 */
 		val Earth = CToastConfiguration(
 			successToastColor = R.color.ctoast_success_earth,
@@ -126,7 +126,7 @@ data class CToastConfiguration(
 		)
 
 		/**
-		 * Nord (Arctic/Cool): A minimalist, professional blue-grey palette.
+		 * Nord (Arctic/Cool): Bảng màu xám xanh tối giản, chuyên nghiệp.
 		 */
 		val Nord = CToastConfiguration(
 			successToastColor = R.color.ctoast_success_nord,
@@ -140,7 +140,7 @@ data class CToastConfiguration(
 		)
 
 		/**
-		 * Material Light: Clean Material Design backgrounds with high-contrast icons.
+		 * Material Light: Nền Material Design sạch sẽ với các biểu tượng có độ tương phản cao.
 		 */
 		val Material = CToastConfiguration(
 			successToastColor = R.color.success_color,
@@ -156,7 +156,7 @@ data class CToastConfiguration(
 }
 
 /**
- * Data class holding the resolved style properties for a specific toast.
+ * Data class lưu trữ các thuộc tính kiểu dáng đã được phân giải cho một toast cụ thể.
  */
 @Immutable
 internal data class StyleSpec(
@@ -174,8 +174,8 @@ const val DURATION_SHORT = 1800L
 const val DURATION_LENGTH = 3400L
 
 /**
- * CompositionLocal to provide the NiceToastConfiguration down the UI tree.
- * Use this to override the default configuration for a specific part of your app.
+ * CompositionLocal để cung cấp CToastConfiguration xuống cây giao diện người dùng.
+ * Sử dụng cái này để ghi đè cấu hình mặc định cho một phần cụ thể trong ứng dụng của bạn.
  */
 val LocalCToastConfig = staticCompositionLocalOf { CToastConfiguration.Modern }
 val LocalToast = compositionLocalOf { CToastState() }
