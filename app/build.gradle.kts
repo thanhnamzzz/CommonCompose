@@ -1,17 +1,18 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
 	alias(libs.plugins.android.application)
-	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.kotlin.compose)
 	alias(libs.plugins.kotlin.serialization)
-	id("com.google.dagger.hilt.android")
+	alias(libs.plugins.dagger.hilt)
 	id("com.google.devtools.ksp")
 }
 
 android {
 	namespace = "common.commons_compose"
-	compileSdk = 36
+	compileSdk {
+		version = release(36) {
+			minorApiLevel = 1
+		}
+	}
 
 	defaultConfig {
 		applicationId = "common.commons_compose"
@@ -35,11 +36,6 @@ android {
 	compileOptions {
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
-	}
-	kotlin {
-		compilerOptions {
-			jvmTarget.set(JvmTarget.JVM_17)
-		}
 	}
 	buildFeatures {
 		compose = true
@@ -69,7 +65,7 @@ dependencies {
 	implementation("io.github.mr0xf00:easycrop:0.1.1")
 
 	//Color picker
-	implementation("com.github.skydoves:colorpicker-compose:1.1.3")
+	implementation("com.github.skydoves:colorpicker-compose:1.2.0")
 	implementation(libs.androidx.compose.runtime)
 	androidTestImplementation(platform(libs.androidx.compose.bom))
 	androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -83,5 +79,6 @@ dependencies {
 	//Hilt
 	implementation(libs.hilt.android)
 	ksp(libs.hilt.android.compiler)
+	ksp("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.0")
 	implementation(libs.androidx.hilt.navigation.compose)
 }
