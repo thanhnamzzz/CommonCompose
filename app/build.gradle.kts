@@ -9,7 +9,7 @@ plugins {
 android {
 	namespace = "common.commons_compose"
 	compileSdk {
-		version = release(36) {
+		version = release(37) {
 			minorApiLevel = 1
 		}
 	}
@@ -17,7 +17,7 @@ android {
 	defaultConfig {
 		applicationId = "common.commons_compose"
 		minSdk = 23
-		targetSdk = 36
+		targetSdk = 37
 		versionCode = 1
 		versionName = "1.0"
 
@@ -59,7 +59,7 @@ dependencies {
 	implementation(libs.kotlinx.serialization.json)
 	implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
-	implementation("io.coil-kt.coil3:coil-compose:3.4.0")
+	implementation("io.coil-kt.coil3:coil-compose:3.5.0")
 	implementation(libs.lottie.compose)
 	//Crop Image
 	implementation("io.github.mr0xf00:easycrop:0.1.1")
@@ -67,7 +67,6 @@ dependencies {
 	//Color picker
 	implementation("com.github.skydoves:colorpicker-compose:1.2.0")
 	implementation(libs.androidx.compose.runtime)
-	androidTestImplementation(platform(libs.androidx.compose.bom))
 	androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 	debugImplementation(libs.androidx.compose.ui.tooling)
 	debugImplementation(libs.androidx.compose.ui.test.manifest)

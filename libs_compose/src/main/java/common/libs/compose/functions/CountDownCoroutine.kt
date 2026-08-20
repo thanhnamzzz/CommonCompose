@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun rememberComposeTimer(
@@ -48,11 +49,11 @@ class CountDownTimerState(
             onTick(_time.value)
             while (_time.value > 0 && isActive) {
                 if (!isPaused) {
-                    delay(intervalMillis)
+                    delay(intervalMillis.milliseconds)
                     _time.update { it - intervalMillis }
                     onTick(_time.value)
                 } else {
-                    delay(100)
+                    delay(100.milliseconds)
                 }
             }
 

@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * HD:
@@ -66,7 +67,7 @@ fun CToastHost(
     // it wouldn't re-run for a new toast with identical content.
     LaunchedEffect(currentData?.id) {
         currentData?.let { cD ->
-            delay(cD.duration)
+            delay(cD.duration.milliseconds)
             hostState.dismiss()
         }
     }

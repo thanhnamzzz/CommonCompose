@@ -1,6 +1,5 @@
 package common.libs.compose.extensions
 
-import android.os.Build
 import android.view.Window
 import android.view.WindowInsetsController
 import android.view.WindowManager
@@ -44,7 +43,7 @@ fun Window.SetNavigationBarContentColor(
 		controllers.isAppearanceLightNavigationBars = isLightBackground
 		// (1) Set navigation bar background
 		if (enforceContrast) {
-			if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+			if (isR30Plus()) {
 				if (isLightBackground) {
 					insetsController?.apply {
 						setSystemBarsAppearance(
@@ -65,7 +64,7 @@ fun Window.SetNavigationBarContentColor(
 			}
 		}
 		// (2) Bật / tắt contrast enforcement
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+		if (isQ29Plus()) {
 			isNavigationBarContrastEnforced = enforceContrast
 		}
 	}
