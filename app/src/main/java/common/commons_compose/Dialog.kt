@@ -46,7 +46,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import common.commons_compose.viewModels.DialogViewModel
-import common.libs.compose.extensions.handlerFunction
+import common.libs.compose.extensions.postDelayedHandler
 
 @Composable
 fun DialogScreen(modifier: Modifier = Modifier, viewModel: DialogViewModel = hiltViewModel()) {
@@ -245,7 +245,7 @@ fun TestDialogFullScreen(
 		composition = composition,
 		iterations = LottieConstants.IterateForever
 	)
-	handlerFunction(5000) { onDismissRequest() }
+	postDelayedHandler(5000) { onDismissRequest() }
 	Dialog(
 		onDismissRequest = {},
 		properties = DialogProperties(

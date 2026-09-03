@@ -17,12 +17,14 @@ import kotlin.time.Duration.Companion.milliseconds
  * @param checkCondition Hàm lambda trả về Boolean: true nếu điều kiện thỏa mãn.
  * @param onConditionMet Hàm lambda sẽ được thực thi khi điều kiện thỏa mãn.
  * @param intervalMs Khoảng thời gian chờ giữa các lần kiểm tra (mặc định 1000ms = 1s).
+ * Phải lớn hơn 0, nếu không vòng lặp sẽ quay liên tục và chiếm CPU.
  */
 fun CoroutineScope.checkConditionLoop(
 	checkCondition: () -> Boolean,
 	onConditionMet: () -> Unit,
-	intervalMs: Long = 1000L
+	@IntRange(from = 1) intervalMs: Long = 1000L
 ) {
+	require(intervalMs > 0) { "intervalMs must be positive" }
 	launch(Dispatchers.IO) {
 		while (!checkCondition()) {
 			delay(intervalMs.milliseconds)
@@ -39,8 +41,9 @@ fun CoroutineScope.checkConditionLoop(
 fun CoroutineScope.checkConditionLoopJob(
 	checkCondition: () -> Boolean,
 	onConditionMet: () -> Unit,
-	intervalMs: Long = 1000L
+	@IntRange(from = 1) intervalMs: Long = 1000L
 ): Job {
+	require(intervalMs > 0) { "intervalMs must be positive" }
 	return launch(Dispatchers.IO) {
 		while (isActive && !checkCondition()) {
 			delay(intervalMs.milliseconds)
@@ -59,14 +62,16 @@ fun CoroutineScope.checkConditionLoopJob(
  * @param onConditionMet Hàm lambda sẽ được thực thi sau khi vòng lặp dừng (dù là do đạt điều kiện hay hết giờ).
  * @param timeoutMs Thời gian tối đa cho phép kiểm tra (tính bằng mili giây). Không được là số âm.
  * @param intervalMs Khoảng thời gian chờ giữa các lần kiểm tra (mặc định 1000ms = 1s).
+ * Phải lớn hơn 0, nếu không vòng lặp sẽ quay liên tục và chiếm CPU.
  */
 fun CoroutineScope.checkConditionLoopWithTimeout(
 	checkCondition: () -> Boolean,
 	onConditionMet: (Boolean) -> Unit,
 	@IntRange(from = 0) timeoutMs: Long,
-	intervalMs: Long = 1000L
+	@IntRange(from = 1) intervalMs: Long = 1000L
 ) {
 	require(timeoutMs >= 0) { "timeoutMs must not be negative" }
+	require(intervalMs > 0) { "intervalMs must be positive" }
 	launch(Dispatchers.IO) {
 		val result: Boolean = withTimeoutOrNull(timeoutMs.milliseconds) {
 			while (!checkCondition()) {
@@ -88,15 +93,19 @@ fun CoroutineScope.checkConditionLoopWithTimeoutJob(
 	checkCondition: () -> Boolean,
 	onConditionMet: (Boolean) -> Unit,
 	@IntRange(from = 0) timeoutMs: Long,
-	intervalMs: Long = 1000L
+	@IntRange(from = 1) intervalMs: Long = 1000L
 ): Job {
 	require(timeoutMs >= 0) { "timeoutMs must not be negative" }
+	require(intervalMs > 0) { "intervalMs must be positive" }
 	return launch(Dispatchers.IO) {
 		val result: Boolean = withTimeoutOrNull(timeoutMs.milliseconds) {
 			while (isActive && !checkCondition()) {
 				delay(intervalMs.milliseconds)
 			}
-			isActive
+			// Chỉ tới được đây khi vòng lặp kết thúc bình thường (điều kiện đã thỏa mãn).
+			// Nếu hết giờ hoặc bị hủy, delay() sẽ ném CancellationException
+			// và withTimeoutOrNull trả về null -> result = false.
+			true
 		} ?: false
 
 		if (isActive) {

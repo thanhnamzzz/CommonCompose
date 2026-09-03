@@ -14,16 +14,17 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
-fun handlerFunction(timeWait: Long, callback: () -> Unit) {
+fun postDelayedHandler(timeWait: Long, callback: () -> Unit) {
 	Handler(Looper.getMainLooper()).postDelayed({ callback() }, timeWait)
 }
 
-fun LifecycleOwner.handlerFunction(
+fun LifecycleOwner.postDelayed(
 	timeWait: Long, callback: () -> Unit
 ) {
 	lifecycleScope.launch {
-		delay(timeWait)
+		delay(timeWait.milliseconds)
 		if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
 			callback()
 		}
@@ -34,7 +35,7 @@ fun LifecycleOwner.handlerFunction(
 fun HandlerFunction(timeWait: Long, callback: () -> Unit) {
 	val lifecycleOwner = LocalLifecycleOwner.current
 	LaunchedEffect(timeWait) {
-		delay(timeWait)
+		delay(timeWait.milliseconds)
 		if (lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
 			callback()
 		}
@@ -49,7 +50,7 @@ fun HandlerComposable(
 	var show by remember { mutableStateOf(false) }
 
 	LaunchedEffect(timeWait) {
-		delay(timeWait)
+		delay(timeWait.milliseconds)
 		if (lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
 			show = true
 		}
