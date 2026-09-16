@@ -2,15 +2,14 @@ package common.libs.compose.extensions
 
 import android.view.Window
 import android.view.WindowInsetsController
-import android.view.WindowManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import common.libs.extensions.isQ29Plus
+import common.libs.extensions.isR30Plus
 
 @Composable
 fun Window.SetStatusBarContentColor(backgroundColor: Color) {
@@ -67,79 +66,5 @@ fun Window.SetNavigationBarContentColor(
 		if (isQ29Plus()) {
 			isNavigationBarContrastEnforced = enforceContrast
 		}
-	}
-}
-
-fun Window.keepScreenOn() {
-	this.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-}
-
-fun Window.clearKeepScreenOn() {
-	this.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-}
-
-fun Window.hideSystemNavigationBar() {
-	WindowCompat.setDecorFitsSystemWindows(this, false)
-
-	WindowInsetsControllerCompat(this, decorView).let { controller ->
-		controller.hide(WindowInsetsCompat.Type.navigationBars())
-		controller.show(WindowInsetsCompat.Type.statusBars())
-		controller.systemBarsBehavior =
-			WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-	}
-}
-
-fun Window.hideSystemStatusBar() {
-	WindowCompat.setDecorFitsSystemWindows(this, false)
-
-	WindowInsetsControllerCompat(this, decorView).let { controller ->
-		controller.show(WindowInsetsCompat.Type.navigationBars())
-		controller.hide(WindowInsetsCompat.Type.statusBars())
-		controller.systemBarsBehavior =
-			WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-	}
-}
-
-fun Window.hideSystemUiBar() {
-	WindowCompat.setDecorFitsSystemWindows(this, false)
-
-	WindowInsetsControllerCompat(this, decorView).let { controller ->
-		controller.hide(WindowInsetsCompat.Type.navigationBars())
-		controller.hide(WindowInsetsCompat.Type.statusBars())
-		controller.systemBarsBehavior =
-			WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-	}
-}
-
-fun Window.showSystemUiBar() {
-	WindowCompat.setDecorFitsSystemWindows(this, false)
-
-	WindowInsetsControllerCompat(this, decorView).let { controller ->
-		controller.show(WindowInsetsCompat.Type.navigationBars())
-		controller.show(WindowInsetsCompat.Type.statusBars())
-		controller.systemBarsBehavior =
-			WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-	}
-}
-
-fun Window.showSystemStatusBar() {
-	WindowCompat.setDecorFitsSystemWindows(this, false)
-
-	WindowInsetsControllerCompat(this, decorView).let { controller ->
-		controller.show(WindowInsetsCompat.Type.statusBars())
-		controller.hide(WindowInsetsCompat.Type.navigationBars())
-		controller.systemBarsBehavior =
-			WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-	}
-}
-
-fun Window.showSystemNavigationBar() {
-	WindowCompat.setDecorFitsSystemWindows(this, false)
-
-	WindowInsetsControllerCompat(this, decorView).let { controller ->
-		controller.hide(WindowInsetsCompat.Type.statusBars())
-		controller.show(WindowInsetsCompat.Type.navigationBars())
-		controller.systemBarsBehavior =
-			WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 	}
 }

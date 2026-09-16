@@ -46,7 +46,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import common.commons_compose.viewModels.DialogViewModel
-import common.libs.compose.extensions.postDelayedHandler
+import common.libs.extensions.postDelayedHandler
 
 @Composable
 fun DialogScreen(modifier: Modifier = Modifier, viewModel: DialogViewModel = hiltViewModel()) {

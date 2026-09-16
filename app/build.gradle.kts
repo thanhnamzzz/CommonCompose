@@ -43,7 +43,7 @@ android {
 dependencies {
 
 	implementation(project(":libs_compose"))
-
+	implementation(libs.commons)
 	implementation(libs.androidx.core.ktx)
 	implementation(libs.androidx.lifecycle.runtime.ktx)
 	implementation(libs.androidx.activity.compose)
@@ -57,7 +57,7 @@ dependencies {
 	implementation(libs.kotlinx.serialization.json)
 	implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
-	implementation("io.coil-kt.coil3:coil-compose:3.5.0")
+	implementation(libs.coil.compose)
 	implementation(libs.lottie.compose)
 	//Crop Image
 	implementation("io.github.mr0xf00:easycrop:0.1.1")

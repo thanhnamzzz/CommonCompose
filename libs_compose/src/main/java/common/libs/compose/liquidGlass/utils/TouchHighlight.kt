@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.util.fastCoerceIn
-import common.libs.compose.extensions.isTiramisu33Plus
+import common.libs.extensions.isTiramisu33Plus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -106,20 +106,20 @@ half4 main(float2 coord) {
 						pressProgressAnimation.stop()
 						positionAnimation.stop()
 
-						async { pressProgressAnimation.animateTo(1f, pressProgressAnimationSpec) }
-						async { positionAnimation.snapTo(startPosition) }
+						launch { pressProgressAnimation.animateTo(1f, pressProgressAnimationSpec) }
+						launch { positionAnimation.snapTo(startPosition) }
 					}
 				},
 				onDragEnd = {
 					animationScope.launch {
-						async { pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec) }
-						async { positionAnimation.animateTo(startPosition, positionAnimationSpec) }
+						launch { pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec) }
+						launch { positionAnimation.animateTo(startPosition, positionAnimationSpec) }
 					}
 				},
 				onDragCancel = {
 					animationScope.launch {
-						async { pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec) }
-						async { positionAnimation.animateTo(startPosition, positionAnimationSpec) }
+						launch { pressProgressAnimation.animateTo(0f, pressProgressAnimationSpec) }
+						launch { positionAnimation.animateTo(startPosition, positionAnimationSpec) }
 					}
 				}
 			) { change, _ ->

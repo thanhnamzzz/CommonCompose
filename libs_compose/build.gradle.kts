@@ -43,6 +43,7 @@ dependencies {
 	implementation(platform(libs.androidx.compose.bom))
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.androidx.navigation3.ui.android)
+	implementation(libs.commons)
 
 	//LiquidGlass
 	api(libs.backdrop)
