@@ -21,3 +21,7 @@ Update LiquidGlass for Button, Toggle, Slider, BottomTabs
 
 ### Version 3.3
 Từ phiên bản này thường đi kèm với [`Commons`](https://github.com/thanhnamzzz/Commons.git) để dùng các function dùng chung bị trùng lặp giữa 2 thư viện ở các phiên bản trước
+
+
+### Version 3.4
+Từ phiên bản này chỉ sử dụng Liquid Glass của chính chủ [`Kyant0`](https://github.com/Kyant0/AndroidLiquidGlass)
