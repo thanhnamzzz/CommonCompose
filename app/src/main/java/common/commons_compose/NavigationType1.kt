@@ -15,7 +15,6 @@ import androidx.navigation3.ui.NavDisplay
 import common.commons_compose.blurView.HazeSample
 import common.commons_compose.colorPicker.ColorPicker
 import common.commons_compose.colorPicker.ImagePicker
-import common.commons_compose.liquidGlass.LiquidView
 
 @Composable
 fun Context.NavigationType1(
@@ -53,14 +52,14 @@ fun Context.NavigationType1(
 				}
 				entry<Screen.CropImage> { ContentCropImage(Modifier.fillMaxSize()) }
 				entry<Screen.LiquidGlass> {
-					LiquidView(
-						modifier = Modifier.fillMaxSize(),
-						innerPadding = innerPadding,
-						context = this@NavigationType1,
-						openLazyColumn = {
-							backStack.add(Screen.LazyColumnLiquid)
-						}
-					)
+//					LiquidView(
+//						modifier = Modifier.fillMaxSize(),
+//						innerPadding = innerPadding,
+//						context = this@NavigationType1,
+//						openLazyColumn = {
+//							backStack.add(Screen.LazyColumnLiquid)
+//						}
+//					)
 				}
 				entry<Screen.ColorPicker> { ColorPicker() }
 				entry<Screen.ImagePicker> { ImagePicker() }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -71,7 +72,7 @@ class MainActivity : ComponentActivity() {
 		)
 		setContent {
 			CommonComposeTheme {
-				window.SetNavigationBarContentColor(Color.Transparent, true)
+				window.SetNavigationBarContentColor(Color.Transparent)
 				Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 //					NavigationType1(innerPadding)
 //					NavigationType2(
@@ -232,10 +233,10 @@ fun TestCountDownTimerCompose(
 	}
 
 	Column(
-		modifier = modifier.fillMaxWidth(),
-		verticalArrangement = Arrangement.Center,
+		modifier = modifier.fillMaxSize(),
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
+		Spacer(Modifier.size(80.dp))
 		Text(text = currentTime.value.toString())
 		Button(onClick = { timer.start(scope) }) { Text("Start") }
 		Button(onClick = { timer.pause() }) { Text("Pause") }

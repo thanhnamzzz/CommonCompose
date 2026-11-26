@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
@@ -27,6 +28,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import common.commons_compose.bottomNavigationBar.ui.theme.CommonComposeTheme
+import common.libs.compose.extensions.SetNavigationBarContentColor
 import common.libs.compose.stackManager.rememberMultiStackNavManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
@@ -66,6 +68,7 @@ class BottomNavigationBar : ComponentActivity() {
 		super.onCreate(savedInstanceState)
 		enableEdgeToEdge()
 		setContent {
+			window.SetNavigationBarContentColor(Color.Transparent)
 			CommonComposeTheme {
 				val bottomNavItems = listOf(Home2, NoteList)
 //				val topLevelBackStack = remember { TopLevelBackStack<NavKey>(Home) }

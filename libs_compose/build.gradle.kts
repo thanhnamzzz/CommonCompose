@@ -44,10 +44,6 @@ dependencies {
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.androidx.navigation3.ui.android)
 	implementation(libs.commons)
-
-	//LiquidGlass
-	api(libs.backdrop)
-//	implementation(libs.capsule)
 }
 
 afterEvaluate {

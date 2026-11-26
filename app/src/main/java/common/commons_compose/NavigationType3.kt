@@ -21,8 +21,6 @@ import common.commons_compose.animation.AnimationView
 import common.commons_compose.blurView.HazeSample
 import common.commons_compose.colorPicker.ColorPicker
 import common.commons_compose.colorPicker.ImagePicker
-import common.commons_compose.liquidGlass.LiquidLazyColumn
-import common.commons_compose.liquidGlass.LiquidView
 import common.libs.compose.stackManager.rememberMultiStackNavManager
 
 @Composable
@@ -62,7 +60,7 @@ fun Context.NavigationType3(
 					is Screen.Home -> {
 						NavEntry(key) {
 							HomeScreen(
-								modifier = Modifier.padding(innerPadding),
+								modifier = Modifier.fillMaxSize().padding(innerPadding),
 								openDialog = { navManager.push(Screen.Dialog) },
 								openCropImage = { navManager.push(Screen.CropImage) },
 								openToast = { navManager.push(Screen.Toast) },
@@ -104,14 +102,14 @@ fun Context.NavigationType3(
 
 					is Screen.LiquidGlass -> {
 						NavEntry(key) {
-							LiquidView(
+							/*LiquidView(
 								modifier = Modifier.fillMaxSize(),
 								innerPadding = innerPadding,
 								context = this@NavigationType3,
 								openLazyColumn = {
 									navManager.push(Screen.LazyColumnLiquid)
 								}
-							)
+							)*/
 						}
 					}
 
@@ -128,16 +126,14 @@ fun Context.NavigationType3(
 					}
 
 					is Screen.LazyColumnLiquid -> {
-						NavEntry(key) { LiquidLazyColumn() }
+						NavEntry(key) { /*LiquidLazyColumn()*/ }
 					}
 
 					is Screen.CountDownTimer -> {
 						NavEntry(key) {
-							TestCountDownTimerCompose(
-								modifier = Modifier.padding(
-									innerPadding
-								)
-							)
+							ScreenGradient {
+								TestCountDownTimerCompose()
+							}
 						}
 					}
 

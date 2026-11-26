@@ -63,7 +63,7 @@ dependencies {
 	implementation("io.github.mr0xf00:easycrop:0.1.1")
 
 	//Color picker
-	implementation("com.github.skydoves:colorpicker-compose:1.2.0")
+	implementation("com.github.skydoves:colorpicker-compose:1.3.0")
 	implementation(libs.androidx.compose.runtime)
 	androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 	debugImplementation(libs.androidx.compose.ui.tooling)
@@ -78,4 +78,7 @@ dependencies {
 	ksp(libs.hilt.android.compiler)
 	ksp("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.0")
 	implementation(libs.androidx.hilt.navigation.compose)
+
+	//Liquid Glass
+	implementation(libs.kyant.backdrop)
 }

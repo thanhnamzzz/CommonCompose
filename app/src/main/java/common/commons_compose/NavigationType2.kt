@@ -19,8 +19,6 @@ import common.commons_compose.animation.AnimationView
 import common.commons_compose.blurView.HazeSample
 import common.commons_compose.colorPicker.ColorPicker
 import common.commons_compose.colorPicker.ImagePicker
-import common.commons_compose.liquidGlass.LiquidLazyColumn
-import common.commons_compose.liquidGlass.LiquidView
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
@@ -104,14 +102,14 @@ fun Context.NavigationType2(
 
 					is Screen.LiquidGlass -> {
 						NavEntry(key) {
-							LiquidView(
+							/*LiquidView(
 								modifier = Modifier.fillMaxSize(),
 								innerPadding = innerPadding,
 								context = this@NavigationType2,
 								openLazyColumn = {
 									backStack.add(Screen.LazyColumnLiquid)
 								}
-							)
+							)*/
 						}
 					}
 
@@ -128,7 +126,7 @@ fun Context.NavigationType2(
 					}
 
 					is Screen.LazyColumnLiquid -> {
-						NavEntry(key) { LiquidLazyColumn() }
+						NavEntry(key) { /*LiquidLazyColumn()*/ }
 					}
 
 					is Screen.CountDownTimer -> {
